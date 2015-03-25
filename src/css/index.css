@@ -95,7 +95,6 @@ li.pile {
 
 li.pile.selected-true, li.card.selected-true {
   border-color: var(--color-08);
-  /*border-right-color: var(--color-08);*/
 }
 
 li.pile.victory, li.card.victory {

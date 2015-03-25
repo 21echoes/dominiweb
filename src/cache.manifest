@@ -1,8 +1,8 @@
 CACHE MANIFEST
-# rev 2
+# rev 4
 
 CACHE:
-js/lib/rqeuire.min.js
+js/lib/require.min.js
 js/index.js
 css/index.css
 
