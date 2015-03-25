@@ -1,5 +1,32 @@
 module.exports = function(grunt) {
+  var rework_vars = require('rework-vars')();
+  var rework_colors = require('rework-plugin-colors')();
+
   grunt.initConfig({
+    autoprefixer: {
+      options: {
+        browsers: ['> 5%']
+      },
+      dist: {
+        files: {
+          'src/css/index-prefixed.css': 'src/css/index.css'
+        }
+      }
+    },
+    rework: {
+      compile: {
+        files: {
+          'built/css/index.css': 'src/css/index-prefixed.css'
+        },
+        options: {
+          toString: {compress: true},
+          use: [
+            rework_vars,
+            rework_colors
+          ]
+        }
+      }
+    },
     requirejs: {
       compile: {
         options: {
@@ -21,13 +48,6 @@ module.exports = function(grunt) {
     copy: {
       built: {
         files: [
-          {
-            expand: true,
-            flatten: true,
-            src: ['./src/css/**'],
-            dest: 'built/css/',
-            filter: 'isFile'
-          },
           {
             expand: true,
             cwd: './src/',
@@ -58,8 +78,10 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-contrib-requirejs');
   grunt.loadNpmTasks('grunt-contrib-copy');
   grunt.loadNpmTasks('grunt-surge');
+  grunt.loadNpmTasks('grunt-autoprefixer');
+  grunt.loadNpmTasks('grunt-rework');
 
-  grunt.registerTask('build', ['requirejs:compile', 'copy:built']);
+  grunt.registerTask('build', ['autoprefixer:dist','rework:compile', 'requirejs:compile', 'copy:built']);
   grunt.registerTask('deploy', ['surge:dominiweb']);
   grunt.registerTask('BAD', ['build', 'deploy']);
 };

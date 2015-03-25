@@ -1,6 +1,10 @@
 CACHE MANIFEST
-# rev 1
-index.html
+# rev 2
+
+CACHE:
 js/lib/rqeuire.min.js
 js/index.js
 css/index.css
+
+NETWORK:
+*

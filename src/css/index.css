@@ -54,7 +54,6 @@ ul {
 }
 
 #supply ul {
-  display: -webkit-flex;
   display: flex;
   flex-wrap: wrap;
 }
@@ -139,15 +138,12 @@ li.pile.count-0 {
 
 /* ** LAYOUT ** */
 #not-supply {
-  display: -webkit-flex;
   display: flex;
   max-width: 100%;
 }
 
 #play-areas {
-  -webkit-flex: 2;
-          flex: 2;
-  display: -webkit-flex;
+  flex: 2;
   display: flex;
 }
 
@@ -157,8 +153,7 @@ li.pile.count-0 {
 }
 
 #info {
-  -webkit-flex: 1;
-          flex: 1;
+  flex: 1;
 }
 
 #turn-indicator, #action-buttons, #turn-state {
