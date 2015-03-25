@@ -63,6 +63,7 @@ ul {
 #supply ul li {
   flex: 1;
   -webkit-flex: 1 1 17%;
+
   max-width: 21%;
   min-width: 17%;
 }
@@ -73,8 +74,11 @@ ul {
 
 li.pile, li.pile-placeholder, li.card {
   padding: 0.25em;
+  padding-top: 0.45em;
   margin: 0.15em;
   width: 8em;
+
+  display: flex;
 }
 
 li.pile, li.card {
@@ -93,6 +97,10 @@ li.pile {
   border-right-width: 3px;
   border-right-color: var(--color-02);
   border-right-style: double;
+}
+
+li.card {
+  width: 6em;
 }
 
 li.pile.selected-true, li.card.selected-true {
@@ -129,12 +137,21 @@ li.pile.count-0 {
   width: 1em;
   text-align: center;
   padding-top: 0.1em;
+  margin-right: 0.25em;
   border-radius: 0.5em;
+  position: relative;
+  top: -0.1em;
 }
 
 .pile-count {
   color: var(--color-03);
-  float: right;
+}
+
+.card-name {
+  flex: 2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 /* ** LAYOUT ** */
