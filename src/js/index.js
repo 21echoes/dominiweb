@@ -7,6 +7,7 @@ requirejs.config({
     Handlebars: "https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.0/handlebars",
     text: "https://cdnjs.cloudflare.com/ajax/libs/require-text/2.0.12/text",
     hbars: "https://cdnjs.cloudflare.com/ajax/libs/requirejs-handlebars/0.0.2/hbars",
+    fastclick: "https://cdnjs.cloudflare.com/ajax/libs/fastclick/1.0.6/fastclick",
 
     utilities: 'utilities',
     routers: 'routers',
@@ -22,9 +23,10 @@ requirejs.config({
   }
 });
 
-define(['jquery', 'routers/router'], function($, DominiwebRouter) {
+define(['jquery', 'fastclick', 'routers/router'], function($, FastClick, DominiwebRouter) {
   $(document).ready(function() {
     'use strict';
+    FastClick.attach(document.body);
     new DominiwebRouter();
     Backbone.history.start();
   });

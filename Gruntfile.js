@@ -40,6 +40,7 @@ module.exports = function(grunt) {
             Handlebars: "lib/handlebars",
             text: "lib/text",
             hbars: "lib/hbars",
+            fastclick: "lib/fastclick",
           },
           stubModules: ['text', 'hbars']
         }
@@ -51,7 +52,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './src/',
-            src: ['index.html','cache.manifest','apple-touch-icon.png'],
+            src: ['index.html','apple-touch-icon.png'],
             dest: 'built/',
             filter: 'isFile'
           },
@@ -60,6 +61,12 @@ module.exports = function(grunt) {
             cwd: './src/js/lib/',
             src: ['require.min.js'],
             dest: 'built/js/lib/',
+            filter: 'isFile'
+          },
+          {
+            expand: true,
+            src: ['cache.manifest'],
+            dest: 'built/',
             filter: 'isFile'
           }
         ]
