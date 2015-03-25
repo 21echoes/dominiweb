@@ -1,0 +1,35 @@
+<div id="cards-select">
+  Select Cards:
+  <select id="cards-type">
+    {{#each preset_categories}}
+    <option value="{{value}}">{{name}}</option>
+    {{/each}}
+  </select>
+
+  <select id="preset">
+    {{#each preset_sets}}
+    <option value="{{value}}">{{name}}</option>
+    {{/each}}
+  </select>
+</div>
+
+<div id="players-select">
+  Select Players:
+  <ol>
+    <li id="player-1-select">
+      Player 1: YOU
+    </li>
+    {{#each player_counts}}
+    <li>
+      Player {{id}}:
+      <select name="player-{{id}}-select" id="player-{{id}}-select">
+        {{#each ../players}}
+        <option value="{{value}}">{{name}}</option>
+        {{/each}}
+      </select>
+    </li>
+    {{/each}}
+  </ol>
+</div>
+
+<a href="#play">Start game!</a>

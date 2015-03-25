@@ -1,0 +1,11 @@
+<div class="play-area" id="{{id}}">
+  {{name}}:
+  <ul id="{{id}}-cards">
+    {{#each cards}}
+    <li class="card treasure treasure-{{value}}" data-key="{{key}}">
+      <span class="cost-badge">{{cost}}</span>
+      <span class="card-name">{{name}}</span>
+    </li>
+    {{/each}}
+  </ul>
+</div>

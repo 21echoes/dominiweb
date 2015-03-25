@@ -1,0 +1,66 @@
+:root {
+  --color-00: #2d2d2d; /* black */
+  --color-01: #393939; /* ... */
+  --color-02: #515151;
+  --color-03: #747369;
+  --color-04: #a09f93;
+  --color-05: #d3d0c8;
+  --color-06: #e8e6df; /* ... */
+  --color-07: #f2f0ec; /* white */
+  --color-08: #f2777a; /* red */
+  --color-09: #f99157; /* orange */
+  --color-0A: #ffcc66; /* yellow */
+  --color-0B: #99cc99; /* green */
+  --color-0C: #66cccc; /* cyan */
+  --color-0D: #6699cc; /* blue */
+  --color-0E: #cc99cc; /* purple */
+  --color-0F: #d27b53; /* brown */
+}
+
+body {
+  color: var(--color-00);
+}
+
+#supply > ul {
+  list-style-type: none;
+}
+
+#supply > ul li {
+  display: inline block; 
+}
+
+li.pile, li.card {
+  padding: 0.25em;
+  border-radius: 0.125em;
+  border: 1px solid var(--color-00);
+  margin: 0.25em;
+
+  cursor: pointer;
+
+  width: 10em;
+}
+
+li.pile {
+  border-right-width: 3px;
+  border-right-color: var(--color-02);
+  border-right-style: double;
+}
+
+li.pile.selected-true {
+  border-color: var(--color-08);
+  /*border-right-color: var(--color-08);*/
+}
+
+.cost-badge {
+  background: var(--color-0A);
+  display: inline-block;
+  width: 1em;
+  text-align: center;
+  padding-top: 0.1em;
+  border-radius: 0.5em;
+}
+
+.pile-count {
+  color: var(--color-04);
+  float: right;
+}

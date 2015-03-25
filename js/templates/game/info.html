@@ -1,0 +1,25 @@
+<div id="turn-state">
+  <div>Actions: {{num_actions}}</div>
+  <div>Buys: {{num_buys}}</div>
+  <div>Coin: {{num_coins}}</div>
+</div>
+<br />
+<div id="instructions">
+  Instructions: {{instructions}}
+</div>
+<div id="action-buttons">
+  Actions:
+  {{#each action_buttons}}
+    {{#if disabled}}
+      <button id="action-{{key}}" disabled="true">{{text}}</button>
+    {{else}}
+      <button id="action-{{key}}">{{text}}</button>
+    {{/if}}
+  {{/each}}
+</div>
+<br />
+<div id="player-stats">
+  <div>Deck: {{deck_size}}</div>
+  <div>Hand: {{hand_size}}</div>
+  <div>Discard: {{discard_size}}</div>
+</div>

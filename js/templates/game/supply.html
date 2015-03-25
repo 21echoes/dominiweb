@@ -1,0 +1,34 @@
+Supply:
+<ul id="treasure">
+  {{#each meta_treasure_piles}}
+    <li class="pile selected-{{selected}} treasure treasure-{{builder.attrs.value}}" id="supply-pile-{{builder.attrs.key}}">
+      <span class="cost-badge">{{builder.attrs.cost}}</span>
+      <span class="card-name">{{builder.attrs.name}}</span>
+      <span class="pile-count">{{count}}</span>
+    </li>
+  {{/each}}
+</ul>
+<ul id="victory">
+  {{#each meta_curse_pile}}
+    <li class="pile selected-{{selected}} curse" id="supply-pile-{{builder.attrs.key}}">
+      <span class="cost-badge">{{builder.attrs.cost}}</span>
+      <span class="card-name">{{builder.attrs.name}}</span>
+      <span class="pile-count">{{count}}</span>
+    </li>
+  {{/each}}
+  {{#each meta_victory_piles}}
+    <li class="pile selected-{{selected}} victory" id="supply-pile-{{builder.attrs.key}}">
+      <span class="cost-badge">{{builder.attrs.cost}}</span>
+      <span class="card-name">{{builder.attrs.name}}</span>
+      <span class="pile-count">{{count}}</span>
+    </li>
+  {{/each}}
+</ul>
+<ul id="kingdom">
+  {{#each kingdom_piles}}
+  {{/each}}
+</ul>
+<ul id="bonus">
+  {{#each bonus_cards}}
+  {{/each}}
+</ul>
