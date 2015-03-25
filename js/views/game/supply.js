@@ -16,6 +16,7 @@ define(['jquery', 'backbone', 'hbars!templates/game/supply'], function($, Backbo
         meta_treasure_piles: _.map(this.supply.meta_treasure_piles(), function(pile) { return pile.toJSON(); }),
         meta_victory_piles: _.map(this.supply.meta_victory_piles(), function(pile) { return pile.toJSON(); }),
         meta_curse_pile: _.map(this.supply.meta_curse_pile(), function(pile) { return pile.toJSON(); }),
+        kingdom_piles: _.map(this.supply.kingdom_piles(), function(pile) { return pile.toJSON(); })
       }));
     },
 

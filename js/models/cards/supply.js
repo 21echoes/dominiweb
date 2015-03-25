@@ -1,4 +1,4 @@
-define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta'], function(Backbone, SupplyPile, CardList) {
+define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], function(Backbone, SupplyPile, CardList) {
   return Backbone.Collection.extend({
     model: SupplyPile,
 
@@ -12,6 +12,9 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta'], func
       this.models.push(new SupplyPile({count: 8, builder: CardList.Estate}));
       this.models.push(new SupplyPile({count: 8, builder: CardList.Duchy}));
       this.models.push(new SupplyPile({count: 8, builder: CardList.Province}));
+
+      // TODO: for now, hard code Market
+      this.models.push(new SupplyPile({count: 10, builder: CardList.Market}));
     },
 
     find_piles_by_type: function(type) {
@@ -47,6 +50,13 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta'], func
 
     meta_curse_pile: function() {
       return this.find_piles_by_type("curse");
+    },
+
+    kingdom_piles: function() {
+      var meta_keys = this.meta_treasure_keys.concat(this.meta_victory_keys).concat(['curse']);
+      return this.filter(function (pile) {
+        return meta_keys.indexOf(pile.get('builder').attrs.key) === -1;
+      });
     },
 
     empty_piles: function() {

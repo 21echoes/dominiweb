@@ -9,11 +9,11 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
       this.set('hand', new Hand());
       this.set('table', new Table());
 
-      this.drawFive();
+      this.draw(5);
     },
 
-    drawFive: function() {
-      this.get('deck').drawInto(this.get('hand'), 5, this.get('discard'));
+    draw: function(count) {
+      this.get('deck').drawInto(this.get('hand'), count, this.get('discard'));
     },
 
     play: function(cards) {

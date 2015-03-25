@@ -47,7 +47,7 @@ li.pile {
   border-right-style: double;
 }
 
-li.pile.selected-true {
+li.pile.selected-true, li.card.selected-true {
   border-color: var(--color-08);
   /*border-right-color: var(--color-08);*/
 }
@@ -101,6 +101,7 @@ li.pile.treasure-3, li.card.treasure-3 {
 
 #play-areas > div {
   flex: 1;
+  max-width: 15em;
 }
 
 #info {

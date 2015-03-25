@@ -3,7 +3,7 @@
   <ul id="{{id}}-cards">
     <!-- TODO: card type, treasure values, etc. -->
     {{#each cards}}
-    <li class="card {{type}} {{treasure_class}}" data-key="{{key}}">
+    <li class="card selected-{{selected}} {{type}} {{treasure_class}}" data-key="{{key}}">
       <span class="cost-badge">{{cost}}</span>
       <span class="card-name">{{name}}</span>
     </li>

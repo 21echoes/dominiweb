@@ -1,7 +1,5 @@
 define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Backbone, template) {
   return Backbone.View.extend({
-    rendered: null,
-
     initialize: function(options, cards) {
       this.id = options.id;
       this.name = options.name;
@@ -15,7 +13,7 @@ define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Bac
 
     render: function() {
       var cardsJSON = this.cards !== null ? this.cards.toJSON() : [];
-      this.rendered = template({id: this.id, name: this.name, cards: cardsJSON});
+      this.$el.html(template({id: this.id, name: this.name, cards: cardsJSON}));
     }
   });
 });

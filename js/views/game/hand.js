@@ -1,9 +1,13 @@
 define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Backbone, template) {
   return Backbone.View.extend({
-    rendered: null,
-
     initialize: function(hand) {
       this.setHand(hand);
+      this.id = 'hand';
+      this.name = 'Hand';
+    },
+
+    events: {
+      "click li.card": "cardClicked"
     },
 
     setHand: function(hand) {
@@ -13,7 +17,12 @@ define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Bac
 
     render: function() {
       var handJSON = this.hand !== null ? _.map(this.hand.prioritySorted(), function(card) { return card.toJSON() }) : [];
-      this.rendered = template({id: 'hand', name: 'Hand', cards: handJSON});
+      this.$el.html(template({id: this.id, name: this.name, cards: handJSON}));
+    },
+
+    cardClicked: function(e) {
+      var card_key = $(e.currentTarget).data('key');
+      this.trigger("hand:card:clicked", this.hand.find_card_by_key(card_key));
     }
   });
 });

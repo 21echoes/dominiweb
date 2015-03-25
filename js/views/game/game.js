@@ -10,8 +10,12 @@ function($, Backbone,
     initialize: function() {
       this.game = new Game();
 
+      this.supplyView = new SupplyView({el: '#supply'}, this.game.get('supply'));
+      this.supplyView.bind("supply:card:clicked", this.supplyPileClicked, this);
+
       var turn = this.game.get('turn');
       this.handView = new HandView(turn.get('player').get('hand'));
+      this.handView.bind("hand:card:clicked", this.handCardClicked, this);
       this.tableView = new ViewOnlyPlayAreaView({id: 'table', name: 'Table'}, turn.get('player').get('table'));
       this.playAreas = [this.handView, this.tableView];
 
@@ -19,9 +23,6 @@ function($, Backbone,
       this.infoView.bind("action-button:clicked", this.actionButtonClicked, this);
 
       // this.setupForTurn(turn); has been implicitly called by the above constructors
-
-      this.supplyView = new SupplyView({el: '#supply'}, this.game.get('supply'));
-      this.supplyView.bind("supply:card:clicked", this.supplyPileClicked, this);
 
       this.initialRender();
     },
@@ -42,16 +43,24 @@ function($, Backbone,
       this.$el.html(template());
 
       this.supplyView.render();
+      
+      var $playAreas = this.$el.find('#play-areas');
+      $playAreas.empty();
+      _.each(this.playAreas, function(playArea) {
+        var selector = '#'+playArea.id;
+        var $el = $('<div/>').attr('id', selector);
+        $playAreas.append($el);
+        playArea.el = selector;
+        playArea.setElement($el);
+        playArea.render();
+      });
 
       this.nonSupplyRender();
     },
 
     nonSupplyRender: function() {
-      var $playAreas = this.$el.find('#play-areas');
-      $playAreas.empty();
       _.each(this.playAreas, function(playArea) {
         playArea.render();
-        $playAreas.append(playArea.rendered);
       });
 
       this.infoView.render();
@@ -63,6 +72,13 @@ function($, Backbone,
         // TODO: bind instead to this.turn.get('selected_piles');
         this.supplyView.render();
         this.infoView.render();
+      }
+    },
+
+    handCardClicked: function(card) {
+      var success = this.game.get('turn').tryToSelectHandCard(card);
+      if (success) {
+        this.nonSupplyRender();
       }
     },
 

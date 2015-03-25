@@ -5,16 +5,25 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
 
     initialize: function(player) {
       this.set('player', player);
-      this.set('play_state_index', player.get('hand').find_cards_by_type('ACTION').length > 0 ? 0 : 1);
+      this.set('play_state_index', 0);
       this.set('num_actions', 1);
       this.set('num_buys', 1);
       this.set('num_coins', 0);
       this.set('selected_piles', []);
       this.set('selected_hand_cards', []);
+
+      var actionCards = player.get('hand').find_cards_by_type('action');
+      if (actionCards.length == 0) {
+        this.advancePlayState();
+      } else {
+        this.preSelectOnlyActionCard();
+      }
     },
 
     takeTurnAction: function(action) {
-      if (action == "no-more-actions") {
+      if (action == "play-selected-action") {
+        this.playAction(this.get('selected_hand_cards')[0]);
+      } else if (action == "no-more-actions") {
         this.advancePlayState();
       } else if (action == "no-more-treasures") {
         this.advancePlayState();
@@ -49,6 +58,44 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       var index = this.get('play_state_index');
       var new_index = (index + 1) % this.playStates.length;
       this.set('play_state_index', new_index);
+    },
+
+    tryToSelectHandCard: function(card) {
+      if (this.playState() == 'ACTIONS') {
+        this.set('selected_hand_cards', [card]);
+        card.set('selected', true);
+        return true;
+      }
+      return false;
+    },
+
+    playAction: function(action_card) {
+      action_card.set('selected', false);
+      this.set('selected_hand_cards', []);
+
+      this.set('num_actions', this.get('num_actions') - 1);
+      this.get('player').play([action_card]);
+
+      action_card.performAction(this);
+
+      if (this.get('num_actions') == 0 || this.get('player').get('hand').find_cards_by_type('action').length == 0) {
+        this.advancePlayState();
+      } else {
+        this.preSelectOnlyActionCard();
+      }
+    },
+
+    preSelectOnlyActionCard: function() {
+      var actionCards = this.get('player').get('hand').find_cards_by_type('action');
+      var uniqueActionCards = _.reduce(actionCards, function(memo, card) {
+        if (memo.indexOf(card.get('key')) === -1) {
+          memo.push(card.get('key'));
+        }
+        return memo;
+      }, []);
+      if (uniqueActionCards.length == 1) {
+        this.tryToSelectHandCard(actionCards[0]);
+      }
     },
 
     playTreasures: function(treasures) {
@@ -103,7 +150,7 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
     end: function() {
       this.get('player').get('discard').place(this.get('player').get('table'));
       this.get('player').get('discard').place(this.get('player').get('hand'));
-      this.get('player').drawFive();
+      this.get('player').draw(5);
       this.set('play_state_index', this.playStates.length - 1);
     }
   });
