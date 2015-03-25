@@ -16,6 +16,7 @@
   --color-0E: #cc99cc; /* purple */
   --color-0F: #d27b53; /* brown */
 }
+
 html, body {
   box-sizing: border-box;
   width: 100%;
@@ -30,6 +31,7 @@ body {
   font-family: 'Helvetica', 'Helvetica Neue', Arial, Verdana, sans-serif;
   line-height: 1.3;
   padding: 0.25em;
+  margin-top: 20px;
 }
 
 body, button, input {
