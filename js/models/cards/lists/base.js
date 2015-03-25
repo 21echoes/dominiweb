@@ -1,4 +1,5 @@
-define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/revealed'], function(CardBuilder, CardList, Revealed) {
+define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/revealed', 'models/action_resolution'],
+  function(CardBuilder, CardList, Revealed, ActionResolution) {
   CardList.Market = new CardBuilder({type: 'action', cost: 5, name: 'Market', key: 'market'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 1);
@@ -63,14 +64,21 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
 
   //   // TODO: reaction on being attacked
   // });
-  // CardList.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room', key: 'council-room'}, {
-  //   performAction: function(turn) {
-  //     turn.set('num_buys', turn.get('num_buys') + 1);
-  //     turn.get('player').draw(4);
+  CardList.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room', key: 'council-room'}, {
+    performAction: function(turn) {
+      turn.set('num_buys', turn.get('num_buys') + 1);
+      turn.get('player').draw(4);
 
-  //     // TODO: all other players draw 1
-  //   }
-  // });
+      return new ActionResolution({
+        responsible_card: this,
+        players: turn.get('game').inactivePlayers(),
+        input: null,
+        behavior: function(player) {
+          player.draw(1);
+        }
+      });
+    }
+  });
   // CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library', key: 'library'}, {
   //   performAction: function(turn) {
   //     var revealed_holding = new Revealed();
@@ -91,12 +99,11 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   //   }
   // });
 
-  // TODO: implement calculateScore
-  // CardList.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens', key: 'gardens'}, {
-  //   calculateScore: function(deck) {
-  //     return Math.floor(deck.length / 10);
-  //   }
-  // });
+  CardList.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens', key: 'gardens'}, {
+    calculateScore: function(deck) {
+      return Math.floor(deck.length / 10);
+    }
+  });
 
   /* TODO:
     Bureaucrat

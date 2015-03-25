@@ -27,8 +27,7 @@ Supply:
 </ul>
 <ul id="kingdom">
   {{#each kingdom_piles}}
-  <!-- TODO: card type -->
-  <li class="pile count-{{count}} selected-{{selected}}" id="supply-pile-{{builder.attrs.key}}">
+  <li class="pile count-{{count}} selected-{{selected}} {{builder.attrs.type}}" id="supply-pile-{{builder.attrs.key}}">
     <span class="cost-badge">{{builder.attrs.cost}}</span>
     <span class="card-name">{{builder.attrs.name}}</span>
     <span class="pile-count">{{count}}</span>

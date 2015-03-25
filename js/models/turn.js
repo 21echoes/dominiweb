@@ -3,9 +3,12 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
     // player: InteractivePlayer
     // play_state_index: int
 
-    initialize: function(player) {
+    initialize: function(game) {
+      this.set('game', game);
+      var player = game.currentPlayer();
       this.set('player', player);
       this.set('play_state_index', 0);
+      this.set('action_resolution', null);
       this.set('num_actions', 1);
       this.set('num_buys', 1);
       this.set('num_coins', 0);
@@ -58,13 +61,19 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       var index = this.get('play_state_index');
       var new_index = (index + 1) % this.playStates.length;
       this.set('play_state_index', new_index);
+
+      // TODO: finish TREASURES if no TREASURES cards
     },
 
     tryToSelectHandCard: function(card) {
       if (this.playState() == 'ACTIONS') {
-        this.set('selected_hand_cards', [card]);
-        card.set('selected', true);
-        return true;
+        if (this.get('action_resolution') && this.get('action_resolution').get('input')) {
+          // TODO: does the action resolution require hand card selection?
+        } else {
+          this.set('selected_hand_cards', [card]);
+          card.set('selected', true);
+          return true;
+        }
       }
       return false;
     },
@@ -76,12 +85,18 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       this.set('num_actions', this.get('num_actions') - 1);
       this.get('player').play([action_card]);
 
-      action_card.performAction(this);
-
-      if (this.get('num_actions') == 0 || this.get('player').get('hand').find_cards_by_type('action').length == 0) {
-        this.advancePlayState();
+      var resolution_step = action_card.performAction(this);
+      if (resolution_step && resolution_step.get('input')) {
+          // TODO: how the fuck to handle input?
       } else {
-        this.preSelectOnlyActionCard();
+        if (resolution_step) {
+          _.each(resolution_step.get('players'), resolution_step.get('behavior'));
+        }
+        if (this.get('num_actions') == 0 || this.get('player').get('hand').find_cards_by_type('action').length == 0) {
+          this.advancePlayState();
+        } else {
+          this.preSelectOnlyActionCard();
+        }
       }
     },
 

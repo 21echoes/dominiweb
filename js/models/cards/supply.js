@@ -21,6 +21,8 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
       this.add(new SupplyPile({count: 10, builder: CardList.Smithy}));
       this.add(new SupplyPile({count: 10, builder: CardList.Village}));
       this.add(new SupplyPile({count: 10, builder: CardList.Woodcutter}));
+      this.add(new SupplyPile({count: 8, builder: CardList.Gardens}));
+      this.add(new SupplyPile({count: 10, builder: CardList.CouncilRoom}));
     },
 
     comparator: function(model) {

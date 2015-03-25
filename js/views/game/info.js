@@ -50,7 +50,13 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
       if (this.turn === null) {
         return "Game Over!";
       } else if (this.turn.playState() == 'ACTIONS') {
-        return "Pick an action card from your hand to play";
+        if (this.turn.get('action_resolution')
+          && this.turn.get('action_resolution').get('input')
+          && this.turn.get('action_resolution').get('input').prompt) {
+          this.turn.get('action_resolution').get('input').prompt;
+        } else {
+          return "Pick an action card from your hand to play";
+        }
       } else if (this.turn.playState() == 'TREASURES') {
         var num_treasures = this.turn.get('player').get('hand').find_cards_by_type("treasure").length;
         if (num_treasures > 1) {
@@ -69,9 +75,13 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
       if (this.turn === null) {
         return [];
       } else if (this.turn.playState() == 'ACTIONS') {
-        var play_enabled = this.turn.get('selected_hand_cards').length > 0;
-        return [{key: 'play-selected-action', text: 'Play', disabled: !play_enabled},
-        {key: 'no-more-actions', text: 'None'}];
+        if (this.turn.get('action_resolution') && this.turn.get('action_resolution').get('input').prompt) {
+          // TODO: action buttons?
+        } else {
+          var play_enabled = this.turn.get('selected_hand_cards').length > 0;
+          return [{key: 'play-selected-action', text: 'Play', disabled: !play_enabled},
+          {key: 'no-more-actions', text: 'None'}];
+        }
       } else if (this.turn.playState() == 'TREASURES') {
         return [{key: 'play-all-treasures', text: 'All'},
         {key: 'no-more-treasures', text: 'None'}];
