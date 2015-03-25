@@ -51,7 +51,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './src/',
-            src: ['index.html','cache.manifest'],
+            src: ['index.html','cache.manifest','apple-touch-icon.png'],
             dest: 'built/',
             filter: 'isFile'
           },
