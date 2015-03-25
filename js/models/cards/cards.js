@@ -20,7 +20,7 @@ define(['backbone', 'models/cards/card'], function(Backbone, Card) {
     },
 
     // convenience method to move all of [hand] into [this] (without shuffling)
-    place: function(hand) {
+    placeFrom: function(hand) {
       hand.drawInto(this, hand.length, null);
     },
 

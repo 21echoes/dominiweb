@@ -148,8 +148,8 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
     },
 
     end: function() {
-      this.get('player').get('discard').place(this.get('player').get('table'));
-      this.get('player').get('discard').place(this.get('player').get('hand'));
+      this.get('player').get('discard').placeFrom(this.get('player').get('table'));
+      this.get('player').get('discard').placeFrom(this.get('player').get('hand'));
       this.get('player').draw(5);
       this.set('play_state_index', this.playStates.length - 1);
     }

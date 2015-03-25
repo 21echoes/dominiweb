@@ -3,18 +3,28 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
     model: SupplyPile,
 
     initialize: function() {
-      this.models.push(new SupplyPile({count: 46, builder: CardList.Copper}));
-      this.models.push(new SupplyPile({count: 40, builder: CardList.Silver}));
-      this.models.push(new SupplyPile({count: 30, builder: CardList.Gold}));
+      this.add(new SupplyPile({count: 46, builder: CardList.Copper}));
+      this.add(new SupplyPile({count: 40, builder: CardList.Silver}));
+      this.add(new SupplyPile({count: 30, builder: CardList.Gold}));
 
-      this.models.push(new SupplyPile({count: 10, builder: CardList.Curse}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Curse}));
 
-      this.models.push(new SupplyPile({count: 8, builder: CardList.Estate}));
-      this.models.push(new SupplyPile({count: 8, builder: CardList.Duchy}));
-      this.models.push(new SupplyPile({count: 8, builder: CardList.Province}));
+      this.add(new SupplyPile({count: 8, builder: CardList.Estate}));
+      this.add(new SupplyPile({count: 8, builder: CardList.Duchy}));
+      this.add(new SupplyPile({count: 8, builder: CardList.Province}));
 
       // TODO: for now, hard code Market
-      this.models.push(new SupplyPile({count: 10, builder: CardList.Market}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Market}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Adventurer}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Festival}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Laboratory}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Smithy}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Village}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Woodcutter}));
+    },
+
+    comparator: function(model) {
+      return model.get('builder').attrs.cost;
     },
 
     find_piles_by_type: function(type) {
