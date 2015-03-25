@@ -160,3 +160,7 @@ li.pile.count-0 {
   -webkit-flex: 1;
           flex: 1;
 }
+
+#turn-indicator, #action-buttons, #turn-state {
+  margin-bottom: 1em;
+}

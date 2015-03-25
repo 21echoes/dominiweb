@@ -20,12 +20,13 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
 
       if (this.turn.isGameOver()) {
         var score_strs = _.map(this.turn.get('game').scores(), function(score, index) {
-          return "Player "+(index+1)+": "+score;
+          return "Player "+(this.turn.get('players')[index].get('name'))+": "+score;
         });
         this.$el.html(template({
           instructions: this.getInstructions(),
           score_strs: score_strs
         }));
+        this.$el.find('#turn-indicator').remove();
         this.$el.find('#turn-state').remove();
         this.$el.find('#action-buttons').remove();
         this.$el.find('#player-stats').remove();
@@ -38,6 +39,8 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
           num_actions: this.turn.get('num_actions'),
           num_buys: this.turn.get('num_buys'),
           num_coins: this.turn.get('num_coins'),
+
+          player_name: this.turn.get('player').get('name'),
 
           instructions: instructions,
 

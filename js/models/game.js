@@ -1,8 +1,8 @@
-define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/interactive_player'], function(Backbone, Supply, Turn, InteractivePlayer) {
+define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/interactive_player', 'models/players/earl'], function(Backbone, Supply, Turn, InteractivePlayer, Earl) {
   return Backbone.Model.extend({
     initialize: function() {
       this.set('supply', new Supply());
-      this.set('players', [new InteractivePlayer()]);
+      this.set('players', [new InteractivePlayer({name: 'Player 1'}), new InteractivePlayer({name: 'Player 2'})]);
       this.set('current_player_index', 0);
       this.set('turn', new Turn(this));
     },
@@ -21,8 +21,8 @@ define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/intera
       if (index >= 0) {
         var numOtherPlayers = this.get('players').length - 1;
         var self = this;
-        _.map(_.range(numOtherPlayers), function(offset) {
-          var other_player_index = (index + offset) % (numOtherPlayers + 1);
+        return _.map(_.range(numOtherPlayers), function(offset) {
+          var other_player_index = (index + offset + 1) % (numOtherPlayers + 1);
           return self.get('players')[other_player_index];
         })
       } else {
@@ -32,7 +32,6 @@ define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/intera
 
     nextTurn: function() {
       if (this.gameIsOver()) {
-        console.log('GAME OVER!', this.scores());
         this.set('current_player_index', -1);
       } else {
         var next_index = (this.get('current_player_index') + 1) % this.get('players').length;

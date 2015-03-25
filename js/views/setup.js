@@ -1,37 +1,38 @@
 define(['jquery', 'underscore', 'backbone', 'hbars!templates/setup'], function($, _, Backbone, template) {
   var presets = {
-    random: {
-      name: "Random",
-      sets: [
-        {value: 'random-base', name: "Random Base Game"},
-        {value: 'random-all', name: "Random (all sets)"}
-      ]
-    },
+    // random: {
+    //   name: "Random",
+    //   sets: [
+    //     {value: 'random-base', name: "Random Base Game"},
+    //     {value: 'random-all', name: "Random (all sets)"}
+    //   ]
+    // },
     predefined: {
       name: "Preset",
       sets: [
-        {value: 'first-game-base', name: "First Game (Base)"},
-        {value: 'big-money-base', name: "Big Money (Base)"}
+        // {value: 'first-game-base', name: "First Game (Base)"},
+        // {value: 'big-money-base', name: "Big Money (Base)"},
+        {value: 'dominiweb-special', name: "Dominiweb Special (Base)"}
       ]
     },
-    "last-played": {
-      name: "Last Played"
-    }
+    // "last-played": {
+    //   name: "Last Played"
+    // }
   };
 
   var players = [
-    {value: 'no-player', name: ""},
-    {value: 'earl', name: "Earl"},
-    {value: 'kristin', name: "Kristin"}
+    // {value: 'no-player', name: ""},
+    {value: 'interactive', name: "Interactive"},
+    // {value: 'earl', name: "Earl"}
   ];
 
   return Backbone.View.extend({
     el: '#container',
 
     state: {
-      category: 'random',
-      set: '',
-      player: ''
+      category: 'predefined',
+      set: 'dominiweb-special',
+      player: 'interactive'
     },
 
     initialize: function(){

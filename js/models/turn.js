@@ -1,6 +1,6 @@
-define(['backbone', 'models/players/interactive_player'], function(Backbone, InteractivePlayer) {
+define(['backbone', 'models/players/player'], function(Backbone, Player) {
   return Backbone.Model.extend({
-    // player: InteractivePlayer
+    // player: Player
     // play_state_index: int
 
     initialize: function(game) {
