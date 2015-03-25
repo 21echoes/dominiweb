@@ -57,6 +57,26 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       turn.set('num_coins', turn.get('num_coins') + 2);
     }
   });
+  CardList.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room', key: 'council_room'}, {
+    performAction: function(turn) {
+      turn.set('num_buys', turn.get('num_buys') + 1);
+      turn.get('player').draw(4);
+      _.each(turn.get('game').inactivePlayers(), function(player) {
+        player.draw(1);
+      });
+    }
+  });
+  CardList.Witch = new CardBuilder({type: 'action', cost: 5, name: 'Witch', key: 'witch'}, {
+    performAction: function(turn) {
+      turn.get('player').draw(2);
+      var curse_pile = turn.get('game').get('supply').meta_curse_pile();
+      _.each(turn.get('game').inactivePlayers(), function(player) {
+        if (curse_pile.get('count') > 0) {
+          player.get('discard').add(curse_pile.getCard());
+        }
+      });
+    }
+  });
   // CardList.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat', key: 'moat'}, {
   //   performAction: function(turn) {
   //     turn.get('player').draw(2);
@@ -64,21 +84,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
 
   //   // TODO: reaction on being attacked
   // });
-  CardList.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room', key: 'council-room'}, {
-    performAction: function(turn) {
-      turn.set('num_buys', turn.get('num_buys') + 1);
-      turn.get('player').draw(4);
-
-      return new ActionResolution({
-        responsible_card: this,
-        players: turn.get('game').inactivePlayers(),
-        input: null,
-        behavior: function(player) {
-          player.draw(1);
-        }
-      });
-    }
-  });
   // CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library', key: 'library'}, {
   //   performAction: function(turn) {
   //     var revealed_holding = new Revealed();
@@ -118,7 +123,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
     Spy
     Thief
     ThroneRoom
-    Witch
     Workshop,
   */
   

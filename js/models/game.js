@@ -58,7 +58,7 @@ define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/intera
     score: function(player) {
       var all_cards = player.allCards();
       return all_cards.reduce(function (memo, card) {
-        if (card.get('type') == 'victory') {
+        if (card.get('type') == 'victory' || card.get('type') == 'curse') {
           if (card.get('value')) {
             return memo + card.get('value');
           } else {

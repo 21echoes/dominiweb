@@ -23,6 +23,7 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
       this.add(new SupplyPile({count: 10, builder: CardList.Woodcutter}));
       this.add(new SupplyPile({count: 8, builder: CardList.Gardens}));
       this.add(new SupplyPile({count: 10, builder: CardList.CouncilRoom}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Witch}));
     },
 
     comparator: function(model) {
@@ -61,7 +62,7 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
     },
 
     meta_curse_pile: function() {
-      return this.find_piles_by_type("curse");
+      return this.find_piles_by_type("curse")[0];
     },
 
     kingdom_piles: function() {
