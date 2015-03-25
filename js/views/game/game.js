@@ -28,15 +28,14 @@ function($, Backbone,
     },
 
     setupForTurn: function(turn) {
-      if (turn) {
-        this.handView.setHand(turn.get('player').get('hand'));
-        this.tableView.setCards(turn.get('player').get('table'));
-        this.infoView.setTurn(turn);
-      } else {
+      if (turn.isGameOver()) {
         this.handView.setHand(null);
         this.tableView.setCards(null);
-        this.infoView.setTurn(null);
+      } else {
+        this.handView.setHand(turn.get('player').get('hand'));
+        this.tableView.setCards(turn.get('player').get('table'));
       }
+      this.infoView.setTurn(turn);
     },
 
     initialRender: function() {

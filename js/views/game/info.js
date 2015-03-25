@@ -18,9 +18,13 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
         this.setElement(this.$el.selector);
       }
 
-      if (this.turn === null) {
+      if (this.turn.isGameOver()) {
+        var score_strs = _.map(this.turn.get('game').scores(), function(score, index) {
+          return "Player "+(index+1)+": "+score;
+        });
         this.$el.html(template({
-          instructions: "Game Over!"
+          instructions: this.getInstructions(),
+          score_strs: score_strs
         }));
         this.$el.find('#turn-state').remove();
         this.$el.find('#action-buttons').remove();
@@ -47,8 +51,8 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
     },
 
     getInstructions: function() {
-      if (this.turn === null) {
-        return "Game Over!";
+      if (this.turn.isGameOver()) {
+        return "Game Over!"
       } else if (this.turn.playState() == 'ACTIONS') {
         if (this.turn.get('action_resolution')
           && this.turn.get('action_resolution').get('input')
@@ -72,7 +76,7 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
     },
 
     getActionButtons: function() {
-      if (this.turn === null) {
+      if (this.turn.isGameOver()) {
         return [];
       } else if (this.turn.playState() == 'ACTIONS') {
         if (this.turn.get('action_resolution') && this.turn.get('action_resolution').get('input').prompt) {

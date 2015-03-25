@@ -22,3 +22,11 @@
   <div>Hand: {{hand_size}}</div>
   <div>Discard: {{discard_size}}</div>
 </div>
+{{#if score_strs}}
+Scores:
+<ul id="scores">
+  {{#each score_strs}}
+  <li class="score">{{this}}</li>
+  {{/each}}
+</ul>
+{{/if}}

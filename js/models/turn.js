@@ -15,7 +15,7 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       this.set('selected_piles', []);
       this.set('selected_hand_cards', []);
 
-      var actionCards = player.get('hand').find_cards_by_type('action');
+      var actionCards = player ? player.get('hand').find_cards_by_type('action') : [];
       if (actionCards.length == 0) {
         this.advancePlayState();
       } else {
@@ -167,6 +167,10 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       this.get('player').get('discard').placeFrom(this.get('player').get('hand'));
       this.get('player').draw(5);
       this.set('play_state_index', this.playStates.length - 1);
+    },
+
+    isGameOver: function() {
+      return this.get('player') === null;
     }
   });
 });

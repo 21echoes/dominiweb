@@ -33,13 +33,12 @@ define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/intera
     nextTurn: function() {
       if (this.gameIsOver()) {
         console.log('GAME OVER!', this.scores());
-        this.set('turn', null);
         this.set('current_player_index', -1);
       } else {
         var next_index = (this.get('current_player_index') + 1) % this.get('players').length;
         this.set('current_player_index', next_index);
-        this.set('turn', new Turn(this));
       }
+      this.set('turn', new Turn(this));
     },
 
     gameIsOver: function() {
