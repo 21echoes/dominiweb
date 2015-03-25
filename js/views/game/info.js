@@ -52,7 +52,7 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
       } else if (this.turn.playState() == 'ACTIONS') {
         return "Play an action from your hand";
       } else if (this.turn.playState() == 'TREASURES') {
-        var num_treasures = this.turn.get('player').get('hand').find_cards_by_type("TREASURE").length;
+        var num_treasures = this.turn.get('player').get('hand').find_cards_by_type("treasure").length;
         if (num_treasures > 1) {
           return "Pick up to "+num_treasures+" treasure cards from your hand to use for money";
         } else {

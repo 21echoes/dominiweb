@@ -1,4 +1,4 @@
-define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta_card_list'], function(Backbone, SupplyPile, CardList) {
+define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta'], function(Backbone, SupplyPile, CardList) {
   return Backbone.Collection.extend({
     model: SupplyPile,
 
@@ -27,17 +27,26 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/meta_card_li
       return piles.length > 0 ? piles[0] : null;
     },
 
+    meta_treasure_keys: ['copper', 'silver', 'gold', 'platinum'],
+    meta_victory_keys: ['estate', 'duchy', 'province', 'colony'],
+
     // TODO: these meta's need to be more selective -- only copper, silver, gold, platinum, curse, estate, duchy, province, colony
     meta_treasure_piles: function() {
-      return this.find_piles_by_type("TREASURE");
+      var self = this;
+      return this.filter(function (pile) {
+        return self.meta_treasure_keys.indexOf(pile.get('builder').attrs.key) !== -1;
+      });
     },
 
     meta_victory_piles: function() {
-      return this.find_piles_by_type("VICTORY");
+      var self = this;
+      return this.filter(function (pile) {
+        return self.meta_victory_keys.indexOf(pile.get('builder').attrs.key) !== -1;
+      });
     },
 
     meta_curse_pile: function() {
-      return this.find_piles_by_type("CURSE");
+      return this.find_piles_by_type("curse");
     },
 
     empty_piles: function() {

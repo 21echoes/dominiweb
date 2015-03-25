@@ -1,6 +1,6 @@
 define(['backbone', 'models/cards/card'], function(Backbone, Card) {
   return Card.extend({
-    type: 'VICTORY',
+    type: 'victory',
     // value: int
     // cost: int
     // name: string

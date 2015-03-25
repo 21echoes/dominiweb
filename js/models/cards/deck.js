@@ -1,4 +1,4 @@
-define(['backbone', 'models/cards/cards', 'models/cards/lists/meta_card_list'], function(Backbone, Cards, CardList) {
+define(['backbone', 'models/cards/cards', 'models/cards/lists/meta'], function(Backbone, Cards, CardList) {
   return Cards.extend({
     standardStart: function() {
       var start = [];

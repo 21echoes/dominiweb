@@ -19,7 +19,7 @@ define(['backbone', 'models/players/interactive_player'], function(Backbone, Int
       } else if (action == "no-more-treasures") {
         this.advancePlayState();
       } else if (action == "play-all-treasures") {
-        var treasures = this.get('player').get('hand').find_cards_by_type("TREASURE");
+        var treasures = this.get('player').get('hand').find_cards_by_type("treasure");
         this.playTreasures(treasures);
         this.advancePlayState();
       } else if (action == "play-selected-treasures") {

@@ -21,11 +21,12 @@ body {
   color: var(--color-00);
 }
 
-#supply > ul {
+/* ** CARD STYLES ** */
+ul {
   list-style-type: none;
 }
 
-#supply > ul li {
+ul li {
   display: inline block; 
 }
 
@@ -51,6 +52,26 @@ li.pile.selected-true {
   /*border-right-color: var(--color-08);*/
 }
 
+li.pile.victory, li.card.victory {
+  background: var(--color-0B);
+}
+
+li.pile.curse, li.card.curse {
+  background: var(--color-0E);
+}
+
+li.pile.treasure-1, li.card.treasure-1 {
+  background: var(--color-0F);
+}
+
+li.pile.treasure-2, li.card.treasure-2 {
+  background: var(--color-05);
+}
+
+li.pile.treasure-3, li.card.treasure-3 {
+  background: var(--color-09);
+}
+
 .cost-badge {
   background: var(--color-0A);
   display: inline-block;
@@ -61,6 +82,28 @@ li.pile.selected-true {
 }
 
 .pile-count {
-  color: var(--color-04);
+  color: var(--color-03);
   float: right;
+}
+
+/* ** LAYOUT ** */
+#not-supply {
+  display: -webkit-flex;
+  display: flex;
+}
+
+#play-areas {
+  -webkit-flex: 2;
+          flex: 2;
+  display: -webkit-flex;
+  display: flex;
+}
+
+#play-areas > div {
+  flex: 1;
+}
+
+#info {
+  -webkit-flex: 1;
+          flex: 1;
 }
