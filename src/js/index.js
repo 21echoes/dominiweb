@@ -23,9 +23,11 @@ requirejs.config({
   }
 });
 
-define(['jquery', 'fastclick', 'routers/router'], function($, FastClick, DominiwebRouter) {
+define(['jquery', 'fastclick', 'routers/router', 'views/reloader'], function($, FastClick, DominiwebRouter, Reloader) {
   $(document).ready(function() {
     'use strict';
+
+    new Reloader();
     FastClick.attach(document.body);
     new DominiwebRouter();
     Backbone.history.start();
