@@ -75,7 +75,6 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       if (this.playState() == 'ACTIONS') {
         if (this.get('action_resolution')
           && this.get('action_resolution').get('source') == 'hand') {
-          console.log('clicked hand card while action resolution in effect');
           if (this.get('action_resolution').canSelectHandCard(card, this.get('selected_hand_cards'))) {
             this.set('selected_hand_cards', this.get('selected_hand_cards').concat([card]));
             card.set('selected', true);
@@ -175,10 +174,15 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       } else if (this.playState() == 'ACTIONS'
         && this.get('action_resolution')
         && this.get('action_resolution').get('source') == 'supply') {
-        console.log('clicked supply pile while action resolution in effect');
-        if (this.get('action_resolution').canSelectPile(pile, this.get('selected_piles'))) {
-          this.set('selected_piles', this.get('selected_piles').concat([pile]));
-          pile.set('selected', true);
+        var selection_result = this.get('action_resolution').canSelectPile(pile, this.get('selected_piles'));
+        if (selection_result[0]) {
+          _.each(this.get('selected_piles'), function(pile) {
+            pile.set('selected', false);
+          });
+          this.set('selected_piles', selection_result[1]);
+          _.each(this.get('selected_piles'), function(pile) {
+            pile.set('selected', true);
+          });
           return true;
         } else {
           return false;
@@ -191,7 +195,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       if (this.playState() == 'BUY' && this.isPileValidToBuy(pile)) {
         this.set('num_coins', this.get('num_coins') - pile.get('builder').attrs.cost);
         this.set('num_buys', this.get('num_buys') - 1);
-        this.get('player').get('discard').add(pile.getCard());
+        this.get('player').gainFromPile(pile);
 
         _.each(this.get('selected_piles'), function(pile) {
           pile.set('selected', false);

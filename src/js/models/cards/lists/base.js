@@ -72,7 +72,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       var curse_pile = turn.get('game').get('supply').meta_curse_pile();
       _.each(turn.get('game').inactivePlayers(), function(player) {
         if (curse_pile.get('count') > 0) {
-          player.get('discard').add(curse_pile.getCard());
+          player.gainFromPile(curse_pile);
         }
       });
     }
@@ -112,6 +112,26 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
         resolve: function(cards_arr) {
           turn.get('player').discard(cards_arr);
           turn.get('player').draw(cards_arr.length);
+          return true;
+        }
+      });
+    }
+  });
+  CardList.Workshop = new CardBuilder({type: 'action', cost: 3, name: 'Workshop'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+      return ResolutionBuilder({
+        source: 'supply',
+        input: 'Gain a card costing up to (4)' // TODO: auto-generate this?
+      }, {
+        canSelectPile: function(pile, already_selected_piles) {
+          if (pile.get('builder').attrs.cost > 4) {
+            return [false, null];
+          }
+          return [true, [pile]];
+        },
+        resolve: function(piles_arr) {
+          this.get('player').gainFromPile(piles_arr[0]);
           return true;
         }
       });

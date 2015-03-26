@@ -83,8 +83,14 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
         return [];
       } else if (this.turn.playState() == 'ACTIONS') {
         if (this.turn.get('action_resolution')) {
+          var str = "Done";
+          if (this.turn.get('action_resolution').get('source') == 'hand') {
+            str = this.turn.get('selected_hand_cards').length > 0 ? "Done" : "None";
+          } else {
+            // supply
+            str = this.turn.get('selected_piles').length > 0 ? "Done" : "None";
+          }
           // TODO: enabled? based on min_ max_ and exact_ count, preferrably in convenience method
-          var str = this.turn.get('selected_hand_cards').length > 0 ? "Done" : "None";
           return [{key: 'choose-selected-for-resolution', text: str}];
         } else {
           var play_enabled = this.turn.get('selected_hand_cards').length > 0;
