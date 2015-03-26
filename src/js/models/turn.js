@@ -27,9 +27,9 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       if (action == "play-selected-action") {
         this.playAction(this.get('selected_hand_cards')[0]);
       } else if (action == "choose-selected-for-resolution") {
-        var resolved = this.resolveAction();
-        if (resolved) {
-          this.set('action_resolution', null);
+        var nextResolution = this.resolveAction();
+        this.set('action_resolution', nextResolution);
+        if (!nextResolution) {
           this.finishedAnAction();
         }
       } else if (action == "no-more-actions") {

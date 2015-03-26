@@ -86,7 +86,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
         resolve: function(cards_arr) {
           turn.get('player').discard(cards_arr);
           turn.get('player').draw(cards_arr.length);
-          return true;
         }
       });
     }
@@ -105,7 +104,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
         },
         resolve: function(piles_arr) {
           turn.get('player').gainFromPile(piles_arr[0]);
-          return true;
         }
       });
     }
@@ -124,7 +122,38 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       }, {
         resolve: function(cards_arr) {
           turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
-          return true;
+        }
+      });
+    }
+  });
+  CardList.Mine = new CardBuilder({type: 'action', cost: 5, name: 'Mine'}, {
+    performAction: function(turn) {
+      var gainerBuilderBuilder = function(trashedCost) {
+        return ResolutionBuilder({
+            source: 'supply',
+            // TODO: enforce *_count
+            exact_count: 1
+          }, {
+            canSelectPile: function(pile, already_selected_piles) {
+              if (pile.get('builder').attrs.type != 'treasure'
+                || pile.get('builder').attrs.cost > (trashedCost + 3)) {
+                return [false, null];
+              }
+              return [true, [pile]];
+            },
+            resolve: function(piles_arr) {
+              turn.get('player').gainFromPile(piles_arr[0]);
+            }
+          });
+      }
+      return ResolutionBuilder({
+        source: 'hand',
+        // TODO: enforce *_count
+        exact_count: 1
+      }, {
+        resolve: function(cards_arr) {
+          turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
+          return gainerBuilderBuilder(cards_arr[0].get('cost'));
         }
       });
     }
@@ -162,8 +191,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   Chancellor
 
   TRASHERS:
-  Chapel
-  Mine (Also a gainer)
   MoneyLender
   Remodel (Also a gainer)
   Thief
