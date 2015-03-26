@@ -77,6 +77,44 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
+  CardList.Cellar = new CardBuilder({type: 'action', cost: 2, name: 'Cellar'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+      return ResolutionBuilder({
+        source: 'hand'
+      }, {
+        resolve: function(cards_arr) {
+          turn.get('player').discard(cards_arr);
+          turn.get('player').draw(cards_arr.length);
+          return true;
+        }
+      });
+    }
+  });
+  CardList.Workshop = new CardBuilder({type: 'action', cost: 3, name: 'Workshop'}, {
+    performAction: function(turn) {
+      return ResolutionBuilder({
+        source: 'supply',
+        input: 'Gain a card costing up to (4)' // TODO: auto-generate this?
+      }, {
+        canSelectPile: function(pile, already_selected_piles) {
+          if (pile.get('builder').attrs.cost > 4) {
+            return [false, null];
+          }
+          return [true, [pile]];
+        },
+        resolve: function(piles_arr) {
+          turn.get('player').gainFromPile(piles_arr[0]);
+          return true;
+        }
+      });
+    }
+  });
+  CardList.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens'}, {
+    calculateScore: function(deck) {
+      return Math.floor(deck.length / 10);
+    }
+  });
   // CardList.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
   //   performAction: function(turn) {
   //     turn.get('player').draw(2);
@@ -103,60 +141,29 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   //     turn.get('player').get('discard').placeFrom(set_aside_actions);
   //   }
   // });
-  CardList.Cellar = new CardBuilder({type: 'action', cost: 2, name: 'Cellar'}, {
-    performAction: function(turn) {
-      turn.set('num_actions', turn.get('num_actions') + 1);
-      return ResolutionBuilder({
-        source: 'hand'
-      }, {
-        resolve: function(cards_arr) {
-          turn.get('player').discard(cards_arr);
-          turn.get('player').draw(cards_arr.length);
-          return true;
-        }
-      });
-    }
-  });
-  CardList.Workshop = new CardBuilder({type: 'action', cost: 3, name: 'Workshop'}, {
-    performAction: function(turn) {
-      turn.set('num_actions', turn.get('num_actions') + 1);
-      return ResolutionBuilder({
-        source: 'supply',
-        input: 'Gain a card costing up to (4)' // TODO: auto-generate this?
-      }, {
-        canSelectPile: function(pile, already_selected_piles) {
-          if (pile.get('builder').attrs.cost > 4) {
-            return [false, null];
-          }
-          return [true, [pile]];
-        },
-        resolve: function(piles_arr) {
-          this.get('player').gainFromPile(piles_arr[0]);
-          return true;
-        }
-      });
-    }
-  });
-
-  CardList.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens'}, {
-    calculateScore: function(deck) {
-      return Math.floor(deck.length / 10);
-    }
-  });
 
   /* TODO:
-    Bureaucrat
-    Chancellor
-    Chapel
-    Feast
-    Militia
-    Mine
-    MoneyLender
-    Remodel
-    Spy
-    Thief
-    ThroneRoom
-    Workshop,
+  NEEDS PLAIN PROMPTS:
+  Library
+  Spy
+  Chancellor
+
+  GAINERS:
+  Feast (needs trash)
+
+  TRASHERS:
+  Chapel
+  Mine
+  MoneyLender
+  Remodel
+  Thief
+
+  NEEDS MULTIPLAYER PROMPTS:
+  Bureaucrat
+  Militia
+
+  OTHER:
+  ThroneRoom
   */
   
   return CardList;
