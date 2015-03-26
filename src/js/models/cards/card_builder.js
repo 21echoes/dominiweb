@@ -3,7 +3,7 @@ define(['models/cards/card'], function(Card) {
     this.attrs = attrs;
     this.functions = functions;
     this.attrs.index = 0;
-    this.attrs.key = this.attrs.name.replace(/ /g, '_').toLowerCase();
+    this.attrs.key = this.attrs.name.replace(/ /g, '-').toLowerCase();
     this.build = function() {
       this.attrs.index = this.attrs.index + 1;
       if (this.functions) {

@@ -126,6 +126,15 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
+  CardList.MoneyLender = new CardBuilder({type: 'action', cost: 4, name: 'Money Lender'}, {
+    performAction: function(turn) {
+      var copper_card = turn.get('player').get('hand').findWhere({key: "copper"});
+      if (copper_card) {
+        turn.get('player').trashFromHand([copper_card], turn.get('game').get('trash'));
+        turn.set('num_coins', turn.get('num_coins') + 3);
+      }
+    }
+  });
   CardList.Mine = new CardBuilder({type: 'action', cost: 5, name: 'Mine'}, {
     performAction: function(turn) {
       var gainerBuilderBuilder = function(trashedCost) {
@@ -191,7 +200,6 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   Chancellor
 
   TRASHERS:
-  MoneyLender
   Remodel (Also a gainer)
   Thief
 
