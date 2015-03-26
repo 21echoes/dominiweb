@@ -15,6 +15,7 @@ define(['backbone'], function(Backbone) {
       if (this.get('type') == 'treasure') {
         json['treasure_class'] = 'treasure-'+this.get('value');
       }
+      json['uid'] = this.get('key')+'_'+this.get('index');
       return json;
     }
   });

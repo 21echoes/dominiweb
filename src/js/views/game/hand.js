@@ -21,8 +21,8 @@ define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Bac
     },
 
     cardClicked: function(e) {
-      var card_key = $(e.currentTarget).data('key');
-      this.trigger("hand:card:clicked", this.hand.find_card_by_key(card_key));
+      var card_uid = $(e.currentTarget).data('uid');
+      this.trigger("hand:card:clicked", this.hand.find_card_by_uid(card_uid));
     }
   });
 });

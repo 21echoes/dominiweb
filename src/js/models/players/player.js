@@ -16,9 +16,14 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
       this.get('deck').drawInto(this.get('hand'), count, this.get('discard'));
     },
 
-    play: function(cards) {
-      this.get('hand').remove(cards);
-      this.get('table').add(cards);
+    play: function(cards_arr) {
+      this.get('hand').remove(cards_arr);
+      this.get('table').add(cards_arr);
+    },
+
+    discard: function(cards_arr) {
+      this.get('hand').remove(cards_arr);
+      this.get('discard').add(cards_arr);
     },
 
     allCards: function() {

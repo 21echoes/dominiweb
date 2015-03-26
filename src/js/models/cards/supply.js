@@ -13,7 +13,7 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
       this.add(new SupplyPile({count: 8, builder: CardList.Duchy}));
       this.add(new SupplyPile({count: 8, builder: CardList.Province}));
 
-      // TODO: for now, hard code Market
+      this.add(new SupplyPile({count: 10, builder: CardList.Cellar}));
       this.add(new SupplyPile({count: 10, builder: CardList.Market}));
       this.add(new SupplyPile({count: 10, builder: CardList.Adventurer}));
       this.add(new SupplyPile({count: 10, builder: CardList.Festival}));

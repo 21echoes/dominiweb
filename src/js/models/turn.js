@@ -26,6 +26,12 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
     takeTurnAction: function(action) {
       if (action == "play-selected-action") {
         this.playAction(this.get('selected_hand_cards')[0]);
+      } else if (action == "choose-selected-for-resolution") {
+        var resolved = this.resolveAction();
+        if (resolved) {
+          this.set('action_resolution', null);
+          this.finishedAnAction();
+        }
       } else if (action == "no-more-actions") {
         this.advancePlayState();
       } else if (action == "no-more-treasures") {
@@ -67,8 +73,16 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
 
     tryToSelectHandCard: function(card) {
       if (this.playState() == 'ACTIONS') {
-        if (this.get('action_resolution') && this.get('action_resolution').get('input')) {
-          // TODO: does the action resolution require hand card selection?
+        if (this.get('action_resolution')
+          && this.get('action_resolution').get('source') == 'hand') {
+          console.log('clicked hand card while action resolution in effect');
+          if (this.get('action_resolution').canSelectHandCard(card, this.get('selected_hand_cards'))) {
+            this.set('selected_hand_cards', this.get('selected_hand_cards').concat([card]));
+            card.set('selected', true);
+            return true;
+          } else {
+            return false;
+          }
         } else {
           this.set('selected_hand_cards', [card]);
           card.set('selected', true);
@@ -86,17 +100,36 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       this.get('player').play([action_card]);
 
       var resolution_step = action_card.performAction(this);
-      if (resolution_step && resolution_step.get('input')) {
-          // TODO: how the fuck to handle input?
+      if (resolution_step) {
+        this.set('action_resolution', resolution_step);
+        // board will handle input here
       } else {
-        if (resolution_step) {
-          _.each(resolution_step.get('players'), resolution_step.get('behavior'));
-        }
-        if (this.get('num_actions') == 0 || this.get('player').get('hand').find_cards_by_type('action').length == 0) {
-          this.advancePlayState();
-        } else {
-          this.preSelectOnlyActionCard();
-        }
+        this.finishedAnAction();
+      }
+    },
+
+    resolveAction: function() {
+      var ar = this.get('action_resolution');
+      var selected = [];
+      if (ar.get('source') == 'hand') {
+        selected = this.get('selected_hand_cards');
+        this.set('selected_hand_cards', []);
+      } else {
+        // piles
+        selected = this.get('selected_piles');
+        this.set('selected_piles', []);
+      }
+      _.each(selected, function(card_or_pile) {
+        card_or_pile.set('selected', false);
+      });
+      return ar.resolve(selected);
+    },
+
+    finishedAnAction: function() {
+      if (this.get('num_actions') == 0 || this.get('player').get('hand').find_cards_by_type('action').length == 0) {
+        this.advancePlayState();
+      } else {
+        this.preSelectOnlyActionCard();
       }
     },
 
@@ -139,6 +172,17 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
           return true;
         }
         return false;
+      } else if (this.playState() == 'ACTIONS'
+        && this.get('action_resolution')
+        && this.get('action_resolution').get('source') == 'supply') {
+        console.log('clicked supply pile while action resolution in effect');
+        if (this.get('action_resolution').canSelectPile(pile, this.get('selected_piles'))) {
+          this.set('selected_piles', this.get('selected_piles').concat([pile]));
+          pile.set('selected', true);
+          return true;
+        } else {
+          return false;
+        }
       }
       return false;
     },

@@ -32,8 +32,17 @@ define(['backbone', 'models/cards/card'], function(Backbone, Card) {
       return this.filter(function (card) { return card.get('name') == name; });
     },
 
-    find_card_by_key: function(key) {
-      var cards = this.filter(function (card) { return card.get('key') == key; });
+    find_cards_by_key: function(key) {
+      return this.filter(function (card) { return card.get('key') == key; });
+    },
+
+    find_card_by_uid: function(uid) {
+      var components = uid.split('_');
+      var key = components[0];
+      var index = parseInt(components[1],10);
+      var cards = this.filter(function (card) {
+        return card.get('key') == key && card.get('index') == index;
+      });
       return cards.length > 0 ? cards[0] : null;
     }
   });

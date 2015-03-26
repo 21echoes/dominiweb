@@ -59,9 +59,8 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
         return "Game Over!"
       } else if (this.turn.playState() == 'ACTIONS') {
         if (this.turn.get('action_resolution')
-          && this.turn.get('action_resolution').get('input')
-          && this.turn.get('action_resolution').get('input').prompt) {
-          this.turn.get('action_resolution').get('input').prompt;
+          && this.turn.get('action_resolution').get('input')) {
+          return this.turn.get('action_resolution').get('input');
         } else {
           return "Pick an action card from your hand to play";
         }
@@ -83,8 +82,10 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
       if (this.turn.isGameOver()) {
         return [];
       } else if (this.turn.playState() == 'ACTIONS') {
-        if (this.turn.get('action_resolution') && this.turn.get('action_resolution').get('input').prompt) {
-          // TODO: action buttons?
+        if (this.turn.get('action_resolution')) {
+          // TODO: enabled? based on min_ max_ and exact_ count, preferrably in convenience method
+          var str = this.turn.get('selected_hand_cards').length > 0 ? "Done" : "None";
+          return [{key: 'choose-selected-for-resolution', text: str}];
         } else {
           var play_enabled = this.turn.get('selected_hand_cards').length > 0;
           return [{key: 'play-selected-action', text: 'Play', disabled: !play_enabled},
