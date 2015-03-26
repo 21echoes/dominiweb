@@ -17,7 +17,8 @@ function($, Backbone,
       this.handView = new HandView(turn.get('player').get('hand'));
       this.handView.bind("hand:card:clicked", this.handCardClicked, this);
       this.tableView = new ViewOnlyPlayAreaView({id: 'table', name: 'Table'}, turn.get('player').get('table'));
-      this.playAreas = [this.handView, this.tableView];
+      this.trashView = new ViewOnlyPlayAreaView({id: 'trash', name: 'Trash'}, turn.get('game').get('trash'));
+      this.playAreas = [this.handView, this.tableView, this.trashView];
 
       this.infoView = new InfoView({el: '#info'}, turn);
       this.infoView.bind("action-button:clicked", this.actionButtonClicked, this);

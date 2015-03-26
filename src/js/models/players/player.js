@@ -30,6 +30,11 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
       this.get('discard').add(pile.getCard());
     },
 
+    trashFromHand: function(cards_arr, trash) {
+      this.get('hand').remove(cards_arr);
+      trash.add(cards_arr);
+    },
+
     allCards: function() {
       var sources = [this.get('deck'), this.get('discard'), this.get('hand'), this.get('table')];
       var models = _.reduce(sources, function(memo, cards) {

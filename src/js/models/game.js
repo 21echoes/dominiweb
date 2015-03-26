@@ -1,7 +1,11 @@
-define(['backbone', 'models/cards/supply', 'models/turn', 'models/players/interactive_player', 'models/players/earl'], function(Backbone, Supply, Turn, InteractivePlayer, Earl) {
+define(['backbone',
+  'models/cards/supply', 'models/cards/trash', 'models/turn',
+  'models/players/interactive_player', 'models/players/earl'],
+function(Backbone, Supply, Trash, Turn, InteractivePlayer, Earl) {
   return Backbone.Model.extend({
     initialize: function() {
       this.set('supply', new Supply());
+      this.set('trash', new Trash());
       this.set('players', [new InteractivePlayer({name: 'Player 1'}), new InteractivePlayer({name: 'Player 2'})]);
       this.set('current_player_index', 0);
       this.set('turn', new Turn(this));

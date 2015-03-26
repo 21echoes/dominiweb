@@ -33,7 +33,7 @@ define(['jquery', 'backbone', 'hbars!templates/reloader'], function($, Backbone,
     promptUpdate: function(evt) {
       console.log('updates available in the manifest');
 
-      // TODO: I think this is right: reset their "no update plz" selection if there's another new update
+      // I think this is right: reset their "no update plz" selection if there's another new update
       this.userDoesNotWant = false;
 
       this.hasUpdate = true;
@@ -45,14 +45,6 @@ define(['jquery', 'backbone', 'hbars!templates/reloader'], function($, Backbone,
       // .swapCache() has retrieved the updated MANIFEST
       // trigger the reload.
       window.location.reload();
-
-      /* TODO: does reload above work? if not:
-        var hash = window.location.hash;
-        var someRouter = new router();
-        Backbone.history.stop();
-        window.location.hash = hash;
-        Backbone.history.start();
-      */
     },
 
     logNoUpdate: function(evt) {
@@ -70,7 +62,6 @@ define(['jquery', 'backbone', 'hbars!templates/reloader'], function($, Backbone,
     },
 
     render: function() {
-      // TODO: render should look at state to hide/not hide and be called in initialize
       this.$el.hide();
       this.$el.html(template());
       if (this.hasUpdate && !this.userDoesNotWant) {

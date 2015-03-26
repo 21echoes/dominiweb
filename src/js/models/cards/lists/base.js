@@ -115,11 +115,24 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       return Math.floor(deck.length / 10);
     }
   });
+  CardList.Chapel = new CardBuilder({type: 'action', cost: 2, name: 'Chapel'}, {
+    performAction: function(turn) {
+      return ResolutionBuilder({
+        source: 'hand',
+        // TODO: enforce max_count
+        max_count: 4
+      }, {
+        resolve: function(cards_arr) {
+          turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
+          return true;
+        }
+      });
+    }
+  });
   // CardList.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
   //   performAction: function(turn) {
   //     turn.get('player').draw(2);
   //   }
-
   //   // TODO: reaction on being attacked
   // });
   // CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
@@ -148,15 +161,15 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   Spy
   Chancellor
 
-  GAINERS:
-  Feast (needs trash)
-
   TRASHERS:
   Chapel
-  Mine
+  Mine (Also a gainer)
   MoneyLender
-  Remodel
+  Remodel (Also a gainer)
   Thief
+
+  GAINERS:
+  Feast (needs trash)
 
   NEEDS MULTIPLAYER PROMPTS:
   Bureaucrat

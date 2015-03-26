@@ -25,6 +25,7 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
       this.add(new SupplyPile({count: 8, builder: CardList.Gardens}));
       this.add(new SupplyPile({count: 10, builder: CardList.CouncilRoom}));
       this.add(new SupplyPile({count: 10, builder: CardList.Witch}));
+      this.add(new SupplyPile({count: 10, builder: CardList.Chapel}));
     },
 
     comparator: function(model) {
@@ -47,7 +48,6 @@ define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], func
     meta_treasure_keys: ['copper', 'silver', 'gold', 'platinum'],
     meta_victory_keys: ['estate', 'duchy', 'province', 'colony'],
 
-    // TODO: these meta's need to be more selective -- only copper, silver, gold, platinum, curse, estate, duchy, province, colony
     meta_treasure_piles: function() {
       var self = this;
       return this.filter(function (pile) {

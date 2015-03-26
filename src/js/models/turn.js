@@ -33,6 +33,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
           this.finishedAnAction();
         }
       } else if (action == "no-more-actions") {
+        // TODO: deselect all actions in hand
         this.advancePlayState();
       } else if (action == "no-more-treasures") {
         this.advancePlayState();
@@ -72,6 +73,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
     },
 
     tryToSelectHandCard: function(card) {
+      // TODO: clicking selected should de-select
       if (this.playState() == 'ACTIONS') {
         if (this.get('action_resolution')
           && this.get('action_resolution').get('source') == 'hand') {
