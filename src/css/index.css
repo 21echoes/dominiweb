@@ -38,16 +38,6 @@ body, button, input {
   font-size: 14px;
 }
 
-@media (max-width: 400px) {
-  body, button, input {
-    font-size: 10px;
-  }
-
-  li.pile, li.pile-placeholder, li.card {
-    font-size: 9px;
-  }
-}
-
 #supply {
   margin-bottom: 1em;
 }
@@ -68,7 +58,7 @@ ul {
   flex: 1;
   -webkit-flex: 1 1 17%;
 
-  max-width: 21%;
+  max-width: 24%;
   min-width: 17%;
 }
 
@@ -94,7 +84,7 @@ li.pile, li.card {
 }
 
 li.pile.selected-true, li.card.selected-true {
-  border-color: var(--color-09);
+  border-color: var(--color-08);
   box-shadow: 1px 1px 4px 2px var(--color-01);
   border-width: 1px 3px 1px 3px;
 }
@@ -111,7 +101,7 @@ li.pile {
 }
 
 li.pile.selected-true {
-  border-right-width: 6px;
+  border-right-style: solid;
 }
 
 li.card {
@@ -172,19 +162,47 @@ li.pile.count-0 {
 }
 
 #play-areas {
-  flex: 2;
+  flex: 3;
   display: flex;
 }
 
 #play-areas > div {
   flex: 1;
   max-width: 12em;
+  min-width: 7em;
 }
 
 #info {
+  flex: 2;
+}
+
+#instructions {
+  height: 3em;
+}
+
+#action-buttons {
+  position: relative;
+  display: flex;
+}
+
+#action-buttons button {
   flex: 1;
 }
 
 #turn-indicator, #action-buttons, #turn-state {
   margin-bottom: 1em;
+}
+
+@media (max-width: 400px) {
+  body, button, input {
+    font-size: 10px;
+  }
+
+  li.pile, li.pile-placeholder, li.card {
+    font-size: 9px;
+  }
+
+  #instructions {
+    height: 4em;
+  }
 }
