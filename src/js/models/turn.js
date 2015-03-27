@@ -26,8 +26,9 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
     takeTurnAction: function(action) {
       if (action == "play-selected-action") {
         this.playAction(this.get('selected_hand_cards')[0]);
-      } else if (action == "choose-selected-for-resolution") {
-        var nextResolution = this.resolveAction();
+      } else if (action == "choose-selected-for-resolution"
+        || action.startsWith("choose-resolution-prompt")) {
+        var nextResolution = this.resolveAction(action);
         this.set('action_resolution', nextResolution);
         if (!nextResolution) {
           this.finishedAnAction();
@@ -109,21 +110,26 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       }
     },
 
-    resolveAction: function() {
+    resolveAction: function(action_str) {
       var ar = this.get('action_resolution');
-      var selected = [];
-      if (ar.get('source') == 'hand') {
-        selected = this.get('selected_hand_cards');
-        this.set('selected_hand_cards', []);
-      } else {
-        // piles
-        selected = this.get('selected_piles');
-        this.set('selected_piles', []);
+      if (ar.get('source')) {
+        var selected = [];
+        if (ar.get('source') == 'hand') {
+          selected = this.get('selected_hand_cards');
+          this.set('selected_hand_cards', []);
+        } else if (ar.get('source') == 'supply') {
+          selected = this.get('selected_piles');
+          this.set('selected_piles', []);
+        }
+        _.each(selected, function(card_or_pile) {
+          card_or_pile.set('selected', false);
+        });
+        return ar.resolve(selected);
+      } else if (ar.get('prompt_buttons')) {
+        var components = action_str.split('_');
+        var button_index = parseInt(components[1],10);
+        return ar.resolve(button_index);
       }
-      _.each(selected, function(card_or_pile) {
-        card_or_pile.set('selected', false);
-      });
-      return ar.resolve(selected);
     },
 
     finishedAnAction: function() {

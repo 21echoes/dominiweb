@@ -11,6 +11,5 @@ define(['models/cards/card_builder'], function(CardBuilder) {
   CardList.Duchy = new CardBuilder({type: 'victory', value: 3, cost: 5, name: 'Duchy', key: 'duchy'});
   CardList.Province = new CardBuilder({type: 'victory', value: 6, cost: 8, name: 'Province', key: 'province'});
 
-  window.CardList = CardList;
   return CardList;
 });

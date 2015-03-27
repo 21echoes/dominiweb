@@ -1,5 +1,5 @@
-define(['backbone', 'models/resolutions/hand_selection', 'models/resolutions/supply_selection'],
-function(Backbone, HandSelection, SupplySelection) {
+define(['backbone', 'models/resolutions/hand_selection', 'models/resolutions/supply_selection', 'models/resolutions/choice_prompt'],
+function(Backbone, HandSelection, SupplySelection, ChoicePrompt) {
   var normalizeAttrs = function(attrs) {
     if (attrs.min_count == attrs.max_count) {
       attrs.exact_count = attrs.min_count;
@@ -45,8 +45,11 @@ function(Backbone, HandSelection, SupplySelection) {
       var NewHandSelection = HandSelection.extend(functions);
       return new NewHandSelection(attrs);
     } else if (attrs.source == 'supply') {
-      var NewSupplySelection = HandSelection.extend(functions);
+      var NewSupplySelection = SupplySelection.extend(functions);
       return new NewSupplySelection(attrs);
+    } else {
+      var NewChoicePrompt = ChoicePrompt.extend(functions);
+      return new NewChoicePrompt(attrs);
     }
   }
   return ResolutionBuilder;

@@ -225,25 +225,63 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   //   }
   //   // TODO: reaction on being attacked
   // });
-  // CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
-  //   performAction: function(turn) {
-  //     var revealed_holding = new Revealed();
-  //     var set_aside_actions = new Revealed();
-  //     while (turn.get('player').get('hand').length < 7 &&
-  //       (turn.get('player').get('deck').length + turn.get('player').get('discard').length) > 0)
-  //     {
-  //       turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('discard'));
-  //       // TODO: user chooses whether or not to discard..
-  //       var user_discards = true;
-  //       if (revealed_holding.models[0].get('type') == 'action' && user_discards) {
-  //         set_aside_actions.placeFrom(revealed_holding);
-  //       } else {
-  //         turn.get('player').get('hand').placeFrom(revealed_holding);
-  //       }
-  //     }
-  //     turn.get('player').get('discard').placeFrom(set_aside_actions);
-  //   }
-  // });
+  CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
+    performAction: function(turn) {
+      var revealed_holding = new Revealed();
+      var set_aside_actions = new Revealed();
+      
+      return this.continueAction(turn, revealed_holding, set_aside_actions);
+    },
+
+    continueAction: function(turn, revealed_holding, set_aside_actions) {
+      var self = this;
+      while (turn.get('player').get('hand').length < 7 &&
+        (turn.get('player').get('deck').length + turn.get('player').get('discard').length) > 0)
+      {
+        turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('player').get('discard'));
+        var drawn_card = revealed_holding.models[0];
+        if (drawn_card.get('type') == 'action') {
+          return ResolutionBuilder({
+              input: 'Set aside '+drawn_card.get('name')+' for discard?',
+              prompt_buttons: [
+                {key: 'choose-resolution-prompt_0', text: "Yes"},
+                {key: 'choose-resolution-prompt_1', text: "No"},
+              ]
+            }, {
+              resolve: function(button_index) {
+                if (button_index == 0) {
+                  set_aside_actions.placeFrom(revealed_holding);
+                } else {
+                  turn.get('player').get('hand').placeFrom(revealed_holding);
+                }
+                return self.continueAction(turn, revealed_holding, set_aside_actions);
+              }
+            });
+        } else {
+          turn.get('player').get('hand').placeFrom(revealed_holding);
+        }
+      }
+      turn.get('player').get('discard').placeFrom(set_aside_actions);
+    }
+  });
+  CardList.Chancellor = new CardBuilder({type: 'action', cost: 3, name: 'Chancellor'}, {
+    performAction: function(turn) {
+      turn.set('num_coins', turn.get('num_coins') + 2);
+      return ResolutionBuilder({
+          input: 'Discard your deck?',
+          prompt_buttons: [
+            {key: 'choose-resolution-prompt_0', text: "Yes"},
+            {key: 'choose-resolution-prompt_1', text: "No"},
+          ]
+        }, {
+          resolve: function(button_index) {
+            if (button_index == 0) {
+              turn.get('player').get('discard').placeFrom(turn.get('player').get('deck'));
+            }
+          }
+        });
+    },
+  });
 
   /* TODO:
   NEEDS PLAIN PROMPTS:
