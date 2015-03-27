@@ -2,13 +2,14 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
   'models/game_setup', 'models/cards/kingdoms/all_kingdoms', 'models/players/all_players'],
   function($, Backbone, template, GameSetup, Kingdoms, Players) {
   var presets = {
-    // random: {
-    //   name: "Random",
-    //   sets: [
-    //     {value: 'random-base', name: "Random Base Game"},
-    //     {value: 'random-all', name: "Random (all sets)"}
-    //   ]
-    // },
+    random: {
+      name: "Random",
+      sets: [
+      // TODO: get these from the Kingdoms object
+        {value: 'random-Base', name: "Random Base Game"},
+        // {value: 'random-all', name: "Random (all sets)"}
+      ]
+    },
     predefined: {
       name: "Preset",
       sets: [
@@ -64,6 +65,7 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
       var self = this;
       this.$el.find('#cards-type').change(function(event) {
         self.state.category = $(this).val();
+        self.render();
       });
       this.$el.find('#preset').change(function(event) {
         self.state.set = $(this).val();

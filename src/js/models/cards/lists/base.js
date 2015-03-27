@@ -362,19 +362,11 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     }
   });
 
-  // CardList.Base.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
-  //   performAction: function(turn) {
-  //     turn.get('player').draw(2);
-  //   }
-  //   // TODO: reaction on being attacked
-  // });
-
   /* TODO:
-  Bureaucrat
-  Throne Room
-
   Militia
   Moat
+  Bureaucrat
+  Throne Room (gonna need some crazy cloning stuff methinks)
   */
 
   return CardList;

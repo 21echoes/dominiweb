@@ -1,8 +1,11 @@
 define(['models/cards/lists/all_cards', 'models/cards/kingdoms/kingdom'], function(CardList, Kingdom) {
   var Kingdoms = {
     getKingdom: function(target) {
+      if (target.startsWith('random')) {
+        return this.getRandomKingdom(target);
+      }
       for (key in this) {
-        if (key == 'getKingdom') {
+        if (typeof key == 'function') {
           continue;
         }
         for (kingdom_key in this[key]) {
@@ -12,6 +15,20 @@ define(['models/cards/lists/all_cards', 'models/cards/kingdoms/kingdom'], functi
           }
         }
       }
+    },
+
+    getRandomKingdom: function(target) {
+      var components = target.split('-');
+      var set_key = components[1];
+      var set = CardList[set_key];
+      var set_keys = Object.keys(set);
+      var cards_arr = _.chain(set_keys.length)
+        .range()
+        .shuffle()
+        .slice(0, 10)
+        .map(function(index) { return set[set_keys[index]]; })
+        .value();
+      return new Kingdom({set: 'base', name: 'Random', cards: cards_arr});
     }
   };
   Kingdoms.Base = {};
