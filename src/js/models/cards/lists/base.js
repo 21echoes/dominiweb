@@ -200,7 +200,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   });
   CardList.Feast = new CardBuilder({type: 'action', cost: 4, name: 'Feast'}, {
     performAction: function(turn) {
-      turn.get('player').trash([this], turn.get('player').get('table'), turn.get('game').get('trash'));
+      turn.get('player').get('table').moveSomeCardsInto(turn.get('game').get('trash'), [this]);
 
       // TODO: factor this out to just {genre: 'gainer', max_cost: '5'}
       return ResolutionBuilder({
@@ -281,6 +281,48 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
           }
         });
     },
+  });
+  CardList.Thief = new CardBuilder({type: 'action', cost: 4, name: 'Thief'}, {
+    performAction: function(turn) {
+      var inactive_players = turn.get('game').inactivePlayers();
+      var inactive_player_index = 0;
+      return this.attackPlayer(inactive_player_index, inactive_players, turn);
+    },
+
+    attackPlayer: function(index, players, turn) {
+      if (index == players.length) {
+        return;
+      }
+      var self = this;
+      var attacked_player = players[index];
+      if ((attacked_player.get('deck').length + attacked_player.get('discard').length) > 0) {
+        var revealed_holding = new Revealed();
+        attacked_player.get('deck').drawInto(revealed_holding, 2, attacked_player.get('discard'));
+        var prompt = attacked_player.get('name')+' revealed '+(revealed_holding.map(function(card) {
+          return card.get('name');
+        }).join(' and '))+'. Which do you wish to trash?';
+        var treasures = revealed_holding.find_cards_by_type('treasure');
+        var buttons = treasures.map(function(card, index) {
+          return {key: 'choose-resolution-prompt_'+index, text: card.get('name')};
+        });
+        buttons.push({key: 'choose-resolution-prompt_'+treasures.length, text: "None"});
+        return ResolutionBuilder({
+            input: prompt,
+            prompt_buttons: buttons
+          }, {
+            resolve: function(button_index) {
+              if (button_index != treasures.length) {
+                var selected_card = treasures[button_index];
+                var trash = turn.get('game').get('trash');
+                revealed_holding.moveSomeCardsInto(trash, [selected_card]);
+                trash.moveSomeCardsInto(turn.get('player').get('discard'), [selected_card]);
+                attacked_player.get('discard').placeFrom(revealed_holding);
+              }
+              return self.attackPlayer(index + 1, players);
+            }
+          });
+      }
+    }
   });
 
   /* TODO:
