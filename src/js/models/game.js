@@ -1,14 +1,32 @@
 define(['backbone',
   'models/cards/supply', 'models/cards/trash', 'models/turn',
-  'models/players/interactive_player', 'models/players/earl'],
-function(Backbone, Supply, Trash, Turn, InteractivePlayer, Earl) {
+  'models/game_setup', 'models/cards/kingdoms/all_kingdoms', 'models/players/all_players'],
+function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
   return Backbone.Model.extend({
-    initialize: function() {
-      this.set('supply', new Supply());
+    initialize: function(gameSetup) {
+      gameSetup = this.normalizeSetup(gameSetup);
+      this.set('supply', new Supply([], {kingdom: gameSetup.get('kingdom')}));
       this.set('trash', new Trash());
-      this.set('players', [new InteractivePlayer({name: 'Player 1'}), new InteractivePlayer({name: 'Player 2'})]);
+      this.set('players', gameSetup.get('players'));
       this.set('current_player_index', 0);
       this.set('turn', new Turn(this));
+    },
+
+    normalizeSetup: function(gameSetup) {
+      if (!gameSetup) {
+        gameSetup = new GameSetup({});
+      }
+      if (!gameSetup.get('kingdom')) {
+        gameSetup.set('kingdom', Kingdoms.getKingdom('first-game')); // TODO: which is default?
+      }
+      if (!gameSetup.get('players') || gameSetup.get('players').length == 0) {
+        var InteractivePlayer = Players.getPlayer('interactive');
+        gameSetup.set('players', [
+          new InteractivePlayer({name: 'Player 1'}),
+          new InteractivePlayer({name: 'Player 2'}) // TODO: what's the default?
+        ]);
+      }
+      return gameSetup;
     },
 
     currentPlayer: function() {

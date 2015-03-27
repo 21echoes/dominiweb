@@ -1,4 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'hbars!templates/setup'], function($, _, Backbone, template) {
+define(['jquery', 'backbone', 'hbars!templates/setup',
+  'models/game_setup', 'models/cards/kingdoms/all_kingdoms', 'models/players/all_players'],
+  function($, Backbone, template, GameSetup, Kingdoms, Players) {
   var presets = {
     // random: {
     //   name: "Random",
@@ -10,9 +12,12 @@ define(['jquery', 'underscore', 'backbone', 'hbars!templates/setup'], function($
     predefined: {
       name: "Preset",
       sets: [
-        // {value: 'first-game-base', name: "First Game (Base)"},
-        // {value: 'big-money-base', name: "Big Money (Base)"},
-        {value: 'dominiweb-special', name: "Dominiweb Special (Base)"}
+      // TODO: get these from the Kingdoms object
+        {value: 'first-game', name: "First Game (Base)"},
+        {value: 'big-money', name: "Big Money (Base)"},
+        {value: 'interaction', name: "Interaction (Base)"},
+        {value: 'size-distortion', name: "Size Distortion (Base)"},
+        {value: 'village-square', name: "Village Square (Base)"},
       ]
     },
     // "last-played": {
@@ -31,11 +36,13 @@ define(['jquery', 'underscore', 'backbone', 'hbars!templates/setup'], function($
 
     state: {
       category: 'predefined',
-      set: 'dominiweb-special',
+      set: 'size-distortion',
       player: 'interactive'
     },
 
-    initialize: function(){
+    initialize: function(bus) {
+      this.bus = bus;
+      this.assembleSetup();
       this.render();
     },
 
@@ -60,10 +67,25 @@ define(['jquery', 'underscore', 'backbone', 'hbars!templates/setup'], function($
       });
       this.$el.find('#preset').change(function(event) {
         self.state.set = $(this).val();
+        self.assembleSetup();
       });
       this.$el.find('#player-2-select').change(function(event) {
         self.state.player = $(this).val();
+        self.assembleSetup();
       });
+    },
+
+    assembleSetup: function() {
+      var PlayerTypeOne = Players.getPlayer('interactive');
+      var PlayerTypeTwo = Players.getPlayer(this.state.player);
+      this.gameSetup = new GameSetup({
+        kingdom: Kingdoms.getKingdom(this.state.set),
+        players: [
+          new PlayerTypeOne({name: 'Player 1'}),
+          new PlayerTypeTwo({name: 'Player 2'})
+        ]
+      })
+      this.bus.trigger('setup:modified', this.gameSetup);
     }
   });
 });

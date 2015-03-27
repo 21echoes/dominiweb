@@ -3,10 +3,10 @@ define(['backbone', 'models/cards/cards', 'models/cards/lists/meta'], function(B
     standardStart: function() {
       var start = [];
       _.each(_.range(7), function() {
-        start.push(CardList.Copper.build());
+        start.push(CardList.Meta.Copper.build());
       });
       _.each(_.range(3), function() {
-        start.push(CardList.Estate.build());
+        start.push(CardList.Meta.Estate.build());
       });
       start = _.shuffle(start);
       this.reset(start);

@@ -1,38 +1,29 @@
-define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/base'], function(Backbone, SupplyPile, CardList) {
+define(['backbone', 'models/cards/supply_pile', 'models/cards/lists/all_cards'], function(Backbone, SupplyPile, CardList) {
   return Backbone.Collection.extend({
     model: SupplyPile,
 
-    initialize: function() {
-      this.add(new SupplyPile({count: 46, builder: CardList.Copper}));
-      this.add(new SupplyPile({count: 40, builder: CardList.Silver}));
-      this.add(new SupplyPile({count: 30, builder: CardList.Gold}));
+    initialize: function(models, options) {
+      models.push(new SupplyPile({count: 46, builder: CardList.Meta.Copper}));
+      models.push(new SupplyPile({count: 40, builder: CardList.Meta.Silver}));
+      models.push(new SupplyPile({count: 30, builder: CardList.Meta.Gold}));
 
-      this.add(new SupplyPile({count: 10, builder: CardList.Curse}));
+      models.push(new SupplyPile({count: 10, builder: CardList.Meta.Curse}));
 
-      this.add(new SupplyPile({count: 8, builder: CardList.Estate}));
-      this.add(new SupplyPile({count: 8, builder: CardList.Duchy}));
-      this.add(new SupplyPile({count: 8, builder: CardList.Province}));
+      models.push(new SupplyPile({count: 8, builder: CardList.Meta.Estate}));
+      models.push(new SupplyPile({count: 8, builder: CardList.Meta.Duchy}));
+      models.push(new SupplyPile({count: 8, builder: CardList.Meta.Province}));
 
-      this.add(new SupplyPile({count: 10, builder: CardList.Workshop}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Cellar}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Market}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Adventurer}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Festival}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Laboratory}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Smithy}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Village}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Woodcutter}));
-      this.add(new SupplyPile({count: 8, builder: CardList.Gardens}));
-      this.add(new SupplyPile({count: 10, builder: CardList.CouncilRoom}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Witch}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Chapel}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Mine}));
-      this.add(new SupplyPile({count: 10, builder: CardList.MoneyLender}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Remodel}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Feast}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Chancellor}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Library}));
-      this.add(new SupplyPile({count: 10, builder: CardList.Thief}));
+      // TODO: determine if Colony game, if Shelters game, etc.
+
+      var kingdom = options.kingdom;
+      _.each(kingdom.get('cards'), function(builder) {
+        var count = 10;
+        if (builder.attrs.type == 'victory') {
+          count = 8;
+        }
+        models.push(new SupplyPile({count: count, builder: builder}));
+        // TODO: if Tournament, add Prizes, etc.
+      });
     },
 
     comparator: function(model) {

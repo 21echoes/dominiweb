@@ -7,8 +7,8 @@ function($, Backbone,
   return Backbone.View.extend({
     el: '#container',
 
-    initialize: function() {
-      this.game = new Game();
+    initialize: function(game) {
+      this.game = game
 
       this.supplyView = new SupplyView({el: '#supply'}, this.game.get('supply'));
       this.supplyView.bind("supply:card:clicked", this.supplyPileClicked, this);

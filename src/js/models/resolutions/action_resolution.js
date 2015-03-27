@@ -1,4 +1,4 @@
-define(['backbone', 'models/game', 'models/cards/cards'], function(Backbone, Game, Cards) {
+define(['backbone'], function(Backbone) {
   return Backbone.Model.extend({
     // resolve : function
     

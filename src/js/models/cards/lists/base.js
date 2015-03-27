@@ -1,6 +1,8 @@
 define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/revealed', 'models/resolutions/resolution_builder'],
-  function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
-  CardList.Market = new CardBuilder({type: 'action', cost: 5, name: 'Market'}, {
+function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
+  CardList.Base = {};
+
+  CardList.Base.Market = new CardBuilder({type: 'action', cost: 5, name: 'Market'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 1);
       turn.set('num_buys', turn.get('num_buys') + 1);
@@ -8,7 +10,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       turn.get('player').draw(1);
     }
   });
-  CardList.Adventurer = new CardBuilder({type: 'action', cost: 6, name: 'Adventurer'}, {
+  CardList.Base.Adventurer = new CardBuilder({type: 'action', cost: 6, name: 'Adventurer'}, {
     performAction: function(turn) {
       var revealed_holding = new Revealed();
       var revealed_treasures = new Revealed();
@@ -27,37 +29,37 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       turn.get('player').get('discard').placeFrom(revealed_non_treasures);
     }
   });
-  CardList.Festival = new CardBuilder({type: 'action', cost: 5, name: 'Festival'}, {
+  CardList.Base.Festival = new CardBuilder({type: 'action', cost: 5, name: 'Festival'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 2);
       turn.set('num_buys', turn.get('num_buys') + 1);
       turn.set('num_coins', turn.get('num_coins') + 2);
     }
   });
-  CardList.Laboratory = new CardBuilder({type: 'action', cost: 5, name: 'Laboratory'}, {
+  CardList.Base.Laboratory = new CardBuilder({type: 'action', cost: 5, name: 'Laboratory'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 1);
       turn.get('player').draw(2);
     }
   });
-  CardList.Smithy = new CardBuilder({type: 'action', cost: 4, name: 'Smithy'}, {
+  CardList.Base.Smithy = new CardBuilder({type: 'action', cost: 4, name: 'Smithy'}, {
     performAction: function(turn) {
       turn.get('player').draw(3);
     }
   });
-  CardList.Village = new CardBuilder({type: 'action', cost: 3, name: 'Village'}, {
+  CardList.Base.Village = new CardBuilder({type: 'action', cost: 3, name: 'Village'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 2);
       turn.get('player').draw(1);
     }
   });
-  CardList.Woodcutter = new CardBuilder({type: 'action', cost: 3, name: 'Woodcutter'}, {
+  CardList.Base.Woodcutter = new CardBuilder({type: 'action', cost: 3, name: 'Woodcutter'}, {
     performAction: function(turn) {
       turn.set('num_buys', turn.get('num_buys') + 1);
       turn.set('num_coins', turn.get('num_coins') + 2);
     }
   });
-  CardList.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room'}, {
+  CardList.Base.CouncilRoom = new CardBuilder({type: 'action', cost: 5, name: 'Council Room'}, {
     performAction: function(turn) {
       turn.set('num_buys', turn.get('num_buys') + 1);
       turn.get('player').draw(4);
@@ -66,7 +68,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Witch = new CardBuilder({type: 'action', cost: 5, name: 'Witch'}, {
+  CardList.Base.Witch = new CardBuilder({type: 'action', cost: 5, name: 'Witch'}, {
     performAction: function(turn) {
       turn.get('player').draw(2);
       var curse_pile = turn.get('game').get('supply').meta_curse_pile();
@@ -77,7 +79,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Cellar = new CardBuilder({type: 'action', cost: 2, name: 'Cellar'}, {
+  CardList.Base.Cellar = new CardBuilder({type: 'action', cost: 2, name: 'Cellar'}, {
     performAction: function(turn) {
       turn.set('num_actions', turn.get('num_actions') + 1);
       return ResolutionBuilder({
@@ -90,7 +92,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Workshop = new CardBuilder({type: 'action', cost: 3, name: 'Workshop'}, {
+  CardList.Base.Workshop = new CardBuilder({type: 'action', cost: 3, name: 'Workshop'}, {
     performAction: function(turn) {
       return ResolutionBuilder({
         source: 'supply',
@@ -108,12 +110,12 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens'}, {
+  CardList.Base.Gardens = new CardBuilder({type: 'victory', cost: 4, name: 'Gardens'}, {
     calculateScore: function(deck) {
       return Math.floor(deck.length / 10);
     }
   });
-  CardList.Chapel = new CardBuilder({type: 'action', cost: 2, name: 'Chapel'}, {
+  CardList.Base.Chapel = new CardBuilder({type: 'action', cost: 2, name: 'Chapel'}, {
     performAction: function(turn) {
       return ResolutionBuilder({
         source: 'hand',
@@ -126,7 +128,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.MoneyLender = new CardBuilder({type: 'action', cost: 4, name: 'Money Lender'}, {
+  CardList.Base.Moneylender = new CardBuilder({type: 'action', cost: 4, name: 'Moneylender'}, {
     performAction: function(turn) {
       var copper_card = turn.get('player').get('hand').findWhere({key: "copper"});
       if (copper_card) {
@@ -135,7 +137,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       }
     }
   });
-  CardList.Mine = new CardBuilder({type: 'action', cost: 5, name: 'Mine'}, {
+  CardList.Base.Mine = new CardBuilder({type: 'action', cost: 5, name: 'Mine'}, {
     performAction: function(turn) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
@@ -167,7 +169,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Remodel = new CardBuilder({type: 'action', cost: 4, name: 'Remodel'}, {
+  CardList.Base.Remodel = new CardBuilder({type: 'action', cost: 4, name: 'Remodel'}, {
     performAction: function(turn) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
@@ -198,7 +200,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  CardList.Feast = new CardBuilder({type: 'action', cost: 4, name: 'Feast'}, {
+  CardList.Base.Feast = new CardBuilder({type: 'action', cost: 4, name: 'Feast'}, {
     performAction: function(turn) {
       turn.get('player').get('table').moveSomeCardsInto(turn.get('game').get('trash'), [this]);
 
@@ -219,13 +221,13 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
-  // CardList.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
+  // CardList.Base.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
   //   performAction: function(turn) {
   //     turn.get('player').draw(2);
   //   }
   //   // TODO: reaction on being attacked
   // });
-  CardList.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
+  CardList.Base.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
     performAction: function(turn) {
       var revealed_holding = new Revealed();
       var set_aside_actions = new Revealed();
@@ -264,7 +266,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       turn.get('player').get('discard').placeFrom(set_aside_actions);
     }
   });
-  CardList.Chancellor = new CardBuilder({type: 'action', cost: 3, name: 'Chancellor'}, {
+  CardList.Base.Chancellor = new CardBuilder({type: 'action', cost: 3, name: 'Chancellor'}, {
     performAction: function(turn) {
       turn.set('num_coins', turn.get('num_coins') + 2);
       return ResolutionBuilder({
@@ -282,7 +284,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
         });
     },
   });
-  CardList.Thief = new CardBuilder({type: 'action', cost: 4, name: 'Thief'}, {
+  CardList.Base.Thief = new CardBuilder({type: 'action', cost: 4, name: 'Thief'}, {
     performAction: function(turn) {
       var inactive_players = turn.get('game').inactivePlayers();
       var inactive_player_index = 0;
@@ -327,20 +329,16 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
 
   /* TODO:
   NEEDS PLAIN PROMPTS:
-  Library
-  Spy
-  Chancellor
-
-  TRASHERS:
-  Thief
+  Spy 1
 
   NEEDS MULTIPLAYER PROMPTS:
-  Bureaucrat
-  Militia
+  Bureaucrat 3
+  Militia 2
 
   OTHER:
-  ThroneRoom
+  ThroneRoom 2
+  Moat 2
   */
-  
+
   return CardList;
 });
