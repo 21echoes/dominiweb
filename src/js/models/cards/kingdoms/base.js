@@ -50,7 +50,7 @@ define(['models/cards/lists/all_cards', 'models/cards/kingdoms/kingdom'], functi
       CardList.Base.Library,
       // CardList.Base.Militia,
       // CardList.Base.Moat,
-      // CardList.Base.Spy,
+      CardList.Base.Spy,
       CardList.Base.Thief,
       CardList.Base.Village,
     ]

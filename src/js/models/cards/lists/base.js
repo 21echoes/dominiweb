@@ -221,12 +221,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       });
     }
   });
-  // CardList.Base.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
-  //   performAction: function(turn) {
-  //     turn.get('player').draw(2);
-  //   }
-  //   // TODO: reaction on being attacked
-  // });
   CardList.Base.Library = new CardBuilder({type: 'action', cost: 5, name: 'Library'}, {
     performAction: function(turn) {
       var revealed_holding = new Revealed();
@@ -320,24 +314,67 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
                 trash.moveSomeCardsInto(turn.get('player').get('discard'), [selected_card]);
                 attacked_player.get('discard').placeFrom(revealed_holding);
               }
-              return self.attackPlayer(index + 1, players);
+              return self.attackPlayer(index + 1, players, turn);
+            }
+          });
+      }
+    }
+  });
+  CardList.Base.Spy = new CardBuilder({type: 'action', cost: 4, name: 'Spy'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+      turn.get('player').draw(1);
+      var players = turn.get('game').get('players');
+      var player_index = 0;
+      return this.spyOnPlayer(player_index, players, turn);
+    },
+
+    spyOnPlayer: function(index, players, turn) {
+      if (index == players.length) {
+        return;
+      }
+      var self = this;
+      var spied_on_player = players[index];
+      if ((spied_on_player.get('deck').length + spied_on_player.get('discard').length) > 0) {
+        var revealed_holding = new Revealed();
+        spied_on_player.get('deck').drawInto(revealed_holding, 1, spied_on_player.get('discard'));
+        var revealed_card = revealed_holding.models[0];
+        var prompt = spied_on_player.get('name')+' revealed '
+          +revealed_card.get('name')+'. Do you wish to discard it?';
+        var buttons = [
+          {key: 'choose-resolution-prompt_0', text: "Yes"},
+          {key: 'choose-resolution-prompt_1', text: "No"},
+        ]
+        return ResolutionBuilder({
+            input: prompt,
+            prompt_buttons: buttons
+          }, {
+            resolve: function(button_index) {
+              if (button_index == 0) {
+                spied_on_player.get('discard').placeFrom(revealed_holding);
+              } else {
+                spied_on_player.get('deck').add(revealed_card, {at: 0});
+              }
+              return self.spyOnPlayer(index + 1, players, turn);
             }
           });
       }
     }
   });
 
+  // CardList.Base.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
+  //   performAction: function(turn) {
+  //     turn.get('player').draw(2);
+  //   }
+  //   // TODO: reaction on being attacked
+  // });
+
   /* TODO:
-  NEEDS PLAIN PROMPTS:
-  Spy 1
+  Bureaucrat
+  Throne Room
 
-  NEEDS MULTIPLAYER PROMPTS:
-  Bureaucrat 3
-  Militia 2
-
-  OTHER:
-  ThroneRoom 2
-  Moat 2
+  Militia
+  Moat
   */
 
   return CardList;
