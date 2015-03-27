@@ -30,9 +30,13 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
       this.get('discard').add(pile.getCard());
     },
 
-    trashFromHand: function(cards_arr, trash) {
-      this.get('hand').remove(cards_arr);
+    trash: function(cards_arr, source, trash) {
+      source.remove(cards_arr);
       trash.add(cards_arr);
+    },
+
+    trashFromHand: function(cards_arr, trash) {
+      this.trash(cards_arr, this.get('hand'), trash);
     },
 
     allCards: function() {

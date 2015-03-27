@@ -167,6 +167,58 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
       });
     }
   });
+  CardList.Remodel = new CardBuilder({type: 'action', cost: 4, name: 'Remodel'}, {
+    performAction: function(turn) {
+      var gainerBuilderBuilder = function(trashedCost) {
+        return ResolutionBuilder({
+            source: 'supply',
+            // TODO: enforce *_count
+            exact_count: 1
+          }, {
+            canSelectPile: function(pile, already_selected_piles) {
+              if (pile.get('builder').attrs.cost > (trashedCost + 2)) {
+                return [false, null];
+              }
+              return [true, [pile]];
+            },
+            resolve: function(piles_arr) {
+              turn.get('player').gainFromPile(piles_arr[0]);
+            }
+          });
+      }
+      return ResolutionBuilder({
+        source: 'hand',
+        // TODO: enforce *_count
+        exact_count: 1
+      }, {
+        resolve: function(cards_arr) {
+          turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
+          return gainerBuilderBuilder(cards_arr[0].get('cost'));
+        }
+      });
+    }
+  });
+  CardList.Feast = new CardBuilder({type: 'action', cost: 4, name: 'Feast'}, {
+    performAction: function(turn) {
+      turn.get('player').trash([this], turn.get('player').get('table'), turn.get('game').get('trash'));
+
+      // TODO: factor this out to just {genre: 'gainer', max_cost: '5'}
+      return ResolutionBuilder({
+        source: 'supply',
+        input: 'Gain a card costing up to (5)' // TODO: auto-generate this?
+      }, {
+        canSelectPile: function(pile, already_selected_piles) {
+          if (pile.get('builder').attrs.cost > 5) {
+            return [false, null];
+          }
+          return [true, [pile]];
+        },
+        resolve: function(piles_arr) {
+          turn.get('player').gainFromPile(piles_arr[0]);
+        }
+      });
+    }
+  });
   // CardList.Moat = new CardBuilder({type: 'action', cost: 2, name: 'Moat'}, {
   //   performAction: function(turn) {
   //     turn.get('player').draw(2);
@@ -200,11 +252,7 @@ define(['models/cards/card_builder', 'models/cards/lists/meta', 'models/cards/re
   Chancellor
 
   TRASHERS:
-  Remodel (Also a gainer)
   Thief
-
-  GAINERS:
-  Feast (needs trash)
 
   NEEDS MULTIPLAYER PROMPTS:
   Bureaucrat
