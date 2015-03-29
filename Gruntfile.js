@@ -52,7 +52,7 @@ module.exports = function(grunt) {
           {
             expand: true,
             cwd: './src/',
-            src: ['index.html','apple-touch-icon.png'],
+            src: ['index.html','apple-touch-icon.png','cache.manifest'],
             dest: 'built/',
             filter: 'isFile'
           },
@@ -61,12 +61,6 @@ module.exports = function(grunt) {
             cwd: './src/js/lib/',
             src: ['require.min.js'],
             dest: 'built/js/lib/',
-            filter: 'isFile'
-          },
-          {
-            expand: true,
-            src: ['cache.manifest'],
-            dest: 'built/',
             filter: 'isFile'
           }
         ]
