@@ -9,6 +9,8 @@ function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
       this.set('trash', new Trash());
       this.set('players', gameSetup.get('players'));
       this.set('current_player_index', 0);
+      this.set('round_count', 0);
+      this.on('change:turn', this.turnChanged);
       this.set('turn', new Turn(this));
     },
 
@@ -21,9 +23,10 @@ function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
       }
       if (!gameSetup.get('players') || gameSetup.get('players').length == 0) {
         var InteractivePlayer = Players.getPlayer('interactive');
+        var Earl = Players.getPlayer('earl');
         gameSetup.set('players', [
           new InteractivePlayer({name: 'Player 1'}),
-          new InteractivePlayer({name: 'Player 2'}) // TODO: what's the default?
+          new Earl({name: 'Player 2'}) // TODO: what's the default?
         ]);
       }
       return gameSetup;
@@ -57,6 +60,9 @@ function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
         this.set('current_player_index', -1);
       } else {
         var next_index = (this.get('current_player_index') + 1) % this.get('players').length;
+        if (next_index == 0) {
+          this.set('round_count', this.get('round_count') + 1);
+        }
         this.set('current_player_index', next_index);
       }
       this.set('turn', new Turn(this));
@@ -88,6 +94,13 @@ function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
         }
         return memo;
       }, 0);
+    },
+
+    turnChanged: function() {
+      // this has moved to game.js view. that feels wrong, tho..
+      // if (this.currentPlayer().key != 'interactive') {
+      //   this.currentPlayer().driveTurn(this.get('turn'));
+      // }
     }
   });
 });

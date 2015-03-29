@@ -21,7 +21,10 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
       if (this.turn.isGameOver()) {
         var self = this;
         var score_strs = _.map(this.turn.get('game').scores(), function(score, index) {
-          return ""+(self.turn.get('game').get('players')[index].get('name'))+": "+score;
+          var name = self.turn.get('game').get('players')[index].get('name');
+          // TODO: num turns
+          var turns = self.turn.get('game').get('round_count');
+          return ""+name+": "+score;
         });
         this.$el.html(template({
           instructions: this.getInstructions(),

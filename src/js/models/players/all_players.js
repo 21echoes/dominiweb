@@ -1,4 +1,4 @@
-define(['models/players/interactive_player'], function(InteractivePlayer) {
+define(['models/players/interactive_player','models/players/earl'], function(InteractivePlayer, Earl) {
   var Players = {
     getPlayer: function(target) {
       for (index in this.players) {
@@ -9,7 +9,8 @@ define(['models/players/interactive_player'], function(InteractivePlayer) {
       }
     },
     players: [
-      InteractivePlayer
+      InteractivePlayer,
+      Earl
     ]
   };
 

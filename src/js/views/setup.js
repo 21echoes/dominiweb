@@ -29,7 +29,7 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
   var players = [
     // {value: 'no-player', name: ""},
     {value: 'interactive', name: "Interactive"},
-    // {value: 'earl', name: "Earl"}
+    {value: 'earl', name: "Earl"}
   ];
 
   return Backbone.View.extend({

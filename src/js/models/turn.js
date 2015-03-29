@@ -47,7 +47,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       } else if (action == "buy") {
         this.tryToBuy(this.get('selected_piles')[0]);
       } else if (action == "end-turn") {
-        this.end();
+        this.cleanUp();
         // calls Game#nextTurn on its own
       }
     },
@@ -165,7 +165,8 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       var cost = pile.get('builder').attrs.cost;
       var num_coins = this.get('num_coins');
       var num_buys = this.get('num_buys');
-      return cost <= num_coins && num_buys > 0;
+      var cards_left = pile.get('count');
+      return cost <= num_coins && num_buys > 0 && cards_left > 0;
     },
 
     tryToSelectPile: function(pile) {
@@ -211,14 +212,14 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
         this.set('selected_piles', []);
 
         if (this.get('num_buys') == 0) {
-          this.end();
+          this.cleanUp();
         }
         return true;
       }
       return false;
     },
 
-    end: function() {
+    cleanUp: function() {
       this.get('player').get('discard').placeFrom(this.get('player').get('table'));
       this.get('player').get('discard').placeFrom(this.get('player').get('hand'));
       this.get('player').draw(5);

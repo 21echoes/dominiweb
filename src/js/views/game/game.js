@@ -8,7 +8,7 @@ function($, Backbone,
     el: '#container',
 
     initialize: function(game) {
-      this.game = game
+      this.game = game;
 
       this.supplyView = new SupplyView({el: '#supply'}, this.game.get('supply'));
       this.supplyView.bind("supply:card:clicked", this.supplyPileClicked, this);
@@ -23,20 +23,31 @@ function($, Backbone,
       this.infoView = new InfoView({el: '#info'}, turn);
       this.infoView.bind("action-button:clicked", this.actionButtonClicked, this);
 
-      // this.setupForTurn(turn); has been implicitly called by the above constructors
+      // this.setupForTurn(turn); has been implicitly called by the above constructors, except
+      this.setupBindingsForTurn(turn);
 
       this.initialRender();
     },
 
     setupForTurn: function(turn) {
+      this.infoView.setTurn(turn);
       if (turn.isGameOver()) {
         this.handView.setHand(null);
         this.tableView.setCards(null);
       } else {
         this.handView.setHand(turn.get('player').get('hand'));
         this.tableView.setCards(turn.get('player').get('table'));
+        this.setupBindingsForTurn(turn);
       }
-      this.infoView.setTurn(turn);
+    },
+
+    setupBindingsForTurn: function(turn) {
+      // TODO: maybe just easier to call .render every time?
+      turn.get('player').get('hand').bind('change', this.handChanged, this);
+      turn.get('player').get('table').bind('change', this.tableChanged, this);
+      turn.get('game').get('trash').bind('change', this.trashChanged, this);
+      turn.get('game').get('supply').bind('change', this.supplyChanged, this);
+      turn.on('change', this.turnChanged, this);
     },
 
     initialRender: function() {
@@ -58,6 +69,11 @@ function($, Backbone,
       this.nonSupplyRender();
     },
 
+    render: function() {
+      this.supplyView.render();
+      this.nonSupplyRender();
+    },
+
     nonSupplyRender: function() {
       _.each(this.playAreas, function(playArea) {
         playArea.render();
@@ -67,30 +83,49 @@ function($, Backbone,
     },
 
     supplyPileClicked: function(pile) {
-      var success = this.game.get('turn').tryToSelectPile(pile);
-      if (success) {
-        // TODO: bind instead to this.turn.get('selected_piles');
-        this.supplyView.render();
-        this.infoView.render();
-      }
+      this.game.get('turn').tryToSelectPile(pile);
     },
 
     handCardClicked: function(card) {
-      var success = this.game.get('turn').tryToSelectHandCard(card);
-      if (success) {
-        this.nonSupplyRender();
-      }
+      this.game.get('turn').tryToSelectHandCard(card);
     },
 
     actionButtonClicked: function(turn_action) {
       this.game.get('turn').takeTurnAction(turn_action);
+    },
+
+    handChanged: function() {
+      this.handView.render();
+      this.infoView.render();
+    },
+
+    tableChanged: function() {
+      this.tableView.render();
+      this.infoView.render();
+    },
+
+    trashChanged: function() {
+      this.trashView.render();
+      this.infoView.render();
+    },
+
+    supplyChanged: function() {
+      this.supplyView.render();
+      this.infoView.render();
+    },
+
+    turnChanged: function() {
       if (this.game.get('turn').playState() == 'WAIT') {
         this.game.nextTurn();
         // TODO: instead, bind to the turn attr on this.game
         this.setupForTurn(this.game.get('turn'));
+
+        // TODO: this should really be in the model..
+        if (this.game.currentPlayer() && this.game.currentPlayer().key != 'interactive') {
+          this.game.currentPlayer().driveTurn(this.game.get('turn'));
+        }
       }
-      this.supplyView.render();
-      this.nonSupplyRender();
+      this.render();
     }
   });
 });
