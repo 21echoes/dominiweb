@@ -7,7 +7,7 @@ define(['backbone'], function(Backbone) {
     },
 
     canSelectPile: function(pile, already_selected_piles) {
-      return false;
+      return [false, null];
     }
   });
 });

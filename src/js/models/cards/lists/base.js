@@ -119,7 +119,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     performAction: function(turn) {
       return ResolutionBuilder({
         source: 'hand',
-        // TODO: enforce max_count
         max_count: 4
       }, {
         resolve: function(cards_arr) {
@@ -159,7 +158,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       }
       return ResolutionBuilder({
         source: 'hand',
-        // TODO: enforce *_count
         exact_count: 1
       }, {
         resolve: function(cards_arr) {
@@ -190,7 +188,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       }
       return ResolutionBuilder({
         source: 'hand',
-        // TODO: enforce *_count
         exact_count: 1
       }, {
         resolve: function(cards_arr) {

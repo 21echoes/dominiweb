@@ -81,14 +81,38 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
           if (this.get('action_resolution').canSelectHandCard(card, this.get('selected_hand_cards'))) {
             this.set('selected_hand_cards', this.get('selected_hand_cards').concat([card]));
             card.set('selected', true);
+            if (this.get('action_resolution').get('max_count')
+              && this.get('action_resolution').get('max_count') < this.get('selected_hand_cards').length) {
+              var first_selected = this.get('selected_hand_cards').splice(0, 1)[0];
+              first_selected.set('selected', false);
+            }
             return true;
           } else {
             return false;
           }
-        } else {
+        } else if (card.get('type') == 'action') {
+          // when not resolving actions, you can only select one card at a time
+          _.each(this.get('selected_hand_cards'), function(card) {
+            card.set('selected', false);
+          });
           this.set('selected_hand_cards', [card]);
           card.set('selected', true);
           return true;
+        }
+      } else if (this.playState() == 'TREASURES') {
+        if (card.get('type') == 'treasure') {
+          if (card.get('selected')) {
+            var index_in_selection = this.get('selected_hand_cards').indexOf(card);
+            if (index_in_selection != -1) {
+              this.get('selected_hand_cards').splice(index_in_selection, 1);
+            }
+            card.set('selected', false);
+            return false;
+          } else {
+            this.set('selected_hand_cards', this.get('selected_hand_cards').concat([card]));
+            card.set('selected', true);
+            return true;
+          }
         }
       }
       return false;

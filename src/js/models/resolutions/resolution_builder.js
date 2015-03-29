@@ -1,7 +1,7 @@
 define(['backbone', 'models/resolutions/hand_selection', 'models/resolutions/supply_selection', 'models/resolutions/choice_prompt'],
 function(Backbone, HandSelection, SupplySelection, ChoicePrompt) {
   var normalizeAttrs = function(attrs) {
-    if (attrs.min_count == attrs.max_count) {
+    if (attrs.min_count && attrs.min_count == attrs.max_count) {
       attrs.exact_count = attrs.min_count;
     }
     if (attrs.exact_count) {
@@ -16,7 +16,7 @@ function(Backbone, HandSelection, SupplySelection, ChoicePrompt) {
       return attrs;
     }
     if (attrs.exact_count) {
-      attrs.input = "Choose exactly "+attrs.exact_count+" cards";
+      attrs.input = "Choose exactly "+attrs.exact_count+" "+(attrs.exact_count == 1 ? "card" : "cards");
     } else if (attrs.min_count) {
       if (attrs.max_count) {
         attrs.input = "Choose at least "+attrs.min_count+" and up to "+attrs.max_count+" cards";
