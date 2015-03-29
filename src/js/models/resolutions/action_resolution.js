@@ -8,6 +8,13 @@ define(['backbone'], function(Backbone) {
 
     canSelectPile: function(pile, already_selected_piles) {
       return [false, null];
+    },
+
+    enoughSelectedForResolution: function(selected) {
+      if (!this.get('min_count')) {
+        return true;
+      }
+      return selected.length >= this.get('min_count');
     }
   });
 });
