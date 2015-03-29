@@ -16,7 +16,7 @@ define(['jquery', 'backbone', 'hbars!templates/game/play-area'], function($, Bac
     },
 
     render: function() {
-      var handJSON = this.hand !== null ? _.map(this.hand.prioritySorted(), function(card) { return card.toJSON() }) : [];
+      var handJSON = this.hand !== null ? this.hand.toJSON() : [];
       this.$el.html(template({id: this.id, name: this.name, cards: handJSON}));
     },
 
