@@ -74,7 +74,12 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
     },
 
     tryToSelectHandCard: function(card) {
-      // TODO: clicking selected should de-select
+      if (card.get('selected')) {
+        var selection_index = this.get('selected_hand_cards').indexOf(card);
+        this.get('selected_hand_cards').splice(selection_index, 1);
+        card.set('selected', false);
+        return false; // ? :\
+      }
       if (this.playState() == 'ACTIONS') {
         if (this.get('action_resolution')
           && this.get('action_resolution').get('source') == 'hand') {
