@@ -32,4 +32,17 @@ define(['jquery', 'fastclick', 'routers/router', 'views/reloader'], function($, 
     new DominiwebRouter();
     Backbone.history.start();
   });
+
+  // TODO: put this in its own polyfill file
+  if (!String.prototype.startsWith) {
+    Object.defineProperty(String.prototype, 'startsWith', {
+      enumerable: false,
+      configurable: false,
+      writable: false,
+      value: function(searchString, position) {
+        position = position || 0;
+        return this.lastIndexOf(searchString, position) === position;
+      }
+    });
+  }
 });
