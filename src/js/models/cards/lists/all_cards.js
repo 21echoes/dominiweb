@@ -1,3 +1,4 @@
-define(['jquery', 'models/cards/lists/base', 'models/cards/lists/prosperity'], function($, BaseCardList, ProsperityCardList) {
-  return $.extend({}, BaseCardList, ProsperityCardList);
+define(['jquery', 'models/cards/lists/base', 'models/cards/lists/intrigue', 'models/cards/lists/prosperity'],
+function($, Base, Intrigue, Prosperity) {
+  return $.extend({}, Base, Intrigue, Prosperity);
 });

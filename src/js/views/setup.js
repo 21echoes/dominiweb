@@ -7,6 +7,7 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
       sets: [
       // TODO: get these from the Kingdoms object
         {value: 'random-Base', name: "Random Base Game"},
+        {value: 'random-Intrigue', name: "Random Intrigue Game"},
         {value: 'random-Prosperity', name: "Random Prosperity Game"},
         // {value: 'random-all', name: "Random (all sets)"}
       ]

@@ -73,9 +73,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       turn.get('player').draw(2);
       var curse_pile = turn.get('game').get('supply').meta_curse_pile();
       _.each(turn.get('game').inactivePlayers(), function(player) {
-        if (curse_pile.get('count') > 0) {
-          player.gainFromPile(curse_pile);
-        }
+        player.gainFromPile(curse_pile);
       });
     }
   });

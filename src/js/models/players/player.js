@@ -25,11 +25,17 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
     },
 
     gainFromPile: function(pile) {
-      this.get('discard').add(pile.getCard());
+      if (pile) {
+        this.get('discard').add(pile.getCard());
+      }
     },
 
     trashFromHand: function(cards_arr, trash) {
       this.get('hand').moveSomeCardsInto(trash, cards_arr);
+    },
+
+    placeFromHandOnTopOfDeck: function(cards_arr) {
+      this.get('hand').moveSomeCardsInto(this.get('deck'), cards_arr, {at: 0});
     },
 
     allCards: function() {

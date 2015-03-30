@@ -24,17 +24,13 @@ define(['backbone', 'models/cards/card'], function(Backbone, Card) {
       hand.drawInto(this, hand.length, null);
     },
 
-    moveSomeCardsInto: function(dest, cards_arr) {
+    moveSomeCardsInto: function(dest, cards_arr, options) {
+      dest.add(cards_arr, options);
       this.remove(cards_arr);
-      dest.add(cards_arr);
     },
 
     find_cards_by_type: function(type) {
       return this.filter(function (card) { return card.get('type') == type; });
-    },
-
-    find_cards_by_name: function(name) {
-      return this.filter(function (card) { return card.get('name') == name; });
     },
 
     find_cards_by_key: function(key) {

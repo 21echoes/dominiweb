@@ -86,18 +86,19 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
         return [];
       } else if (this.turn.playState() == 'ACTIONS') {
         if (this.turn.get('action_resolution')) {
-          var str = "Done";
-          var selected = [];
-          if (this.turn.get('action_resolution').get('source') == 'hand') {
-            selected = this.turn.get('selected_hand_cards');
-            str = selected.length > 0 ? "Done" : "None";
-          } else if (this.turn.get('action_resolution').get('source') == 'supply') {
-            selected = this.turn.get('selected_piles');
-            str = selected.length > 0 ? "Done" : "None";
-          } else {
+          if (!this.turn.get('action_resolution').get('source')) {
             return this.turn.get('action_resolution').get('prompt_buttons');
           }
-          var enabled = this.turn.get('action_resolution').enoughSelectedForResolution(selected);
+          var selected = [];
+          var enabled = true;
+          if (this.turn.get('action_resolution').get('source') == 'hand') {
+            selected = this.turn.get('selected_hand_cards');
+            enabled = this.turn.get('action_resolution').enoughHandCardsSelectedForResolution(selected, this.turn.get('player').get('hand'));
+          } else if (this.turn.get('action_resolution').get('source') == 'supply') {
+            selected = this.turn.get('selected_piles');
+            enabled = this.turn.get('action_resolution').enoughSupplyPilesSelectedForResolution(selected, this.turn.get('game').get('supply'));
+          }
+          var str = selected.length > 0 ? "Done" : "None";
           return [{key: 'choose-selected-for-resolution', text: str, disabled: !enabled}];
         } else {
           var play_enabled = this.turn.get('selected_hand_cards').length > 0;
