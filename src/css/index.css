@@ -56,7 +56,7 @@ ul {
 
 #supply ul li {
   flex: 1;
-  -webkit-flex: 1 1 17%;
+  -webkit-flex: 1 1 21%;
 
   max-width: 24%;
   min-width: 17%;

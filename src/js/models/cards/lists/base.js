@@ -306,6 +306,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
                 var selected_card = treasures[button_index];
                 var trash = turn.get('game').get('trash');
                 revealed_holding.moveSomeCardsInto(trash, [selected_card]);
+                // TODO: return prompt that does this! the user doesn't have to gain the trashed card
                 trash.moveSomeCardsInto(turn.get('player').get('discard'), [selected_card]);
                 attacked_player.get('discard').placeFrom(revealed_holding);
               }
