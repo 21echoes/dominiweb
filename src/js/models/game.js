@@ -19,14 +19,14 @@ function(Backbone, Supply, Trash, Turn, GameSetup, Kingdoms, Players) {
         gameSetup = new GameSetup({});
       }
       if (!gameSetup.get('kingdom')) {
-        gameSetup.set('kingdom', Kingdoms.getKingdom('first-game')); // TODO: which is default?
+        gameSetup.set('kingdom', Kingdoms.getKingdom('random-all'));
       }
       if (!gameSetup.get('players') || gameSetup.get('players').length == 0) {
         var InteractivePlayer = Players.getPlayer('interactive');
         var Earl = Players.getPlayer('earl');
         gameSetup.set('players', [
           new InteractivePlayer({name: 'Player 1'}),
-          new Earl({name: 'Player 2'}) // TODO: what's the default?
+          new Earl({name: 'Player 2'})
         ]);
       }
       return gameSetup;

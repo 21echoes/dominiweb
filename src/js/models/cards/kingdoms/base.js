@@ -20,15 +20,35 @@ define(['models/cards/lists/all_cards', 'models/cards/kingdoms/kingdom'], functi
     getRandomKingdom: function(target) {
       var components = target.split('-');
       var set_key = components[1];
-      var set = CardList[set_key];
-      var set_keys = Object.keys(set);
-      var cards_arr = _.chain(set_keys.length)
-        .range()
-        .shuffle()
-        .slice(0, 10)
-        .map(function(index) { return set[set_keys[index]]; })
-        .value();
-      return new Kingdom({set: 'base', name: 'Random', cards: cards_arr});
+      var cards_arr;
+      if (set_key == 'all') {
+        var All = {};
+        for (m_set_key in CardList) {
+          if (m_set_key == 'Meta') {
+            continue;
+          }
+          for (card_key in CardList[m_set_key]) {
+            All[card_key] = CardList[m_set_key][card_key];
+          }
+        }
+        var card_keys = Object.keys(All);
+        cards_arr = _.chain(card_keys.length)
+          .range()
+          .shuffle()
+          .slice(0, 10)
+          .map(function(index) { return All[card_keys[index]]; })
+          .value();
+      } else {
+        var set = CardList[set_key];
+        var set_keys = Object.keys(set);
+        cards_arr = _.chain(set_keys.length)
+          .range()
+          .shuffle()
+          .slice(0, 10)
+          .map(function(index) { return set[set_keys[index]]; })
+          .value();
+      }
+      return new Kingdom({set: set_key, name: 'Random', cards: cards_arr});
     }
   };
   Kingdoms.Base = {};
