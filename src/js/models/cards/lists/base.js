@@ -150,7 +150,10 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
               return [true, [pile]];
             },
             resolve: function(piles_arr) {
-              turn.get('player').gainFromPile(piles_arr[0]);
+              var pile = piles_arr[0];
+              if (pile) {
+                this.get('hand').add(pile.getCard());
+              }
             }
           });
       }
