@@ -28,8 +28,6 @@ define(['jquery', 'backbone', 'hbars!templates/reloader'], function($, Backbone,
       if (applicationCache.status == applicationCache.UPDATEREADY) {
         this.promptUpdate();
       }
-
-      // TODO: if this.$el.data('version') != localStorage.get('appVersion') { this.promptUpdate() }, write to localStorage in reloadPage
     },
 
     promptUpdate: function(evt) {
@@ -51,6 +49,13 @@ define(['jquery', 'backbone', 'hbars!templates/reloader'], function($, Backbone,
 
     logNoUpdate: function(evt) {
       console.log('no updates in the manifest');
+
+      var self = this;
+      $.getJSON("version.json", function(data) {
+        if (data.version != self.$el.data('version')) {
+          self.promptUpdate();
+        }
+      });
     },
 
     hideReloadPrompt: function() {
