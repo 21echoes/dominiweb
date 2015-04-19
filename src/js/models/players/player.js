@@ -34,6 +34,10 @@ define(['backbone', 'models/cards/deck', 'models/cards/hand', 'models/cards/disc
       this.get('hand').moveSomeCardsInto(trash, cards_arr);
     },
 
+    discardHand: function() {
+      this.get('discard').placeFrom(this.get('hand'));
+    },
+
     placeFromHandOnTopOfDeck: function(cards_arr) {
       this.get('hand').moveSomeCardsInto(this.get('deck'), cards_arr, {at: 0});
     },

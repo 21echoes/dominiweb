@@ -250,7 +250,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
 
     cleanUp: function() {
       this.get('player').get('discard').placeFrom(this.get('player').get('table'));
-      this.get('player').get('discard').placeFrom(this.get('player').get('hand'));
+      this.get('player').discardHand();
       this.get('player').draw(5);
       this.set('play_state_index', this.playStates.length - 1);
     },

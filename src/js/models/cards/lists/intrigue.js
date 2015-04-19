@@ -238,9 +238,57 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       });
     }
   });
+  CardList.Intrigue.MiningVillage = new CardBuilder({type: 'action', cost: 4, name: 'Mining Village'}, {
+    performAction: function(turn) {
+      turn.get('player').draw(1);
+      turn.set('num_actions', turn.get('num_actions') + 2);
+      return ResolutionBuilder({
+        input: "Trash Mining Village for +2 coin?",
+        prompt_buttons: [
+          {key: 'choose-resolution-prompt_0', text: 'Yes'},
+          {key: 'choose-resolution-prompt_1', text: 'No'},
+        ]
+      }, {
+        resolve: function(button_index) {
+          if (button_index === 0) {
+            mv = [turn.get('player').get('table').find_cards_by_key('mining-village')[0]];
+            turn.get('player').get('table').moveSomeCardsInto(turn.get('game').get('trash'), mv);
+            turn.set('num_coins', turn.get('num_coins') + 2);
+          }
+        }
+      });
+    }
+  });
   CardList.Intrigue.Duke = new CardBuilder({type: 'victory', cost: 5, name: 'Duke'}, {
     calculateScore: function(deck) {
       return deck.find_cards_by_key('duchy').length;
+    }
+  });
+  CardList.Intrigue.Minion = new CardBuilder({type: 'action', cost: 5, name: 'Minion'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+      return ResolutionBuilder({
+        input: "+2 Coin, or discard your hand for +4 cards and all other players with more than 4 cards in hand discard their hands for +4 cards",
+        prompt_buttons: [
+          {key: 'choose-resolution-prompt_0', text: '+2 Coin'},
+          {key: 'choose-resolution-prompt_1', text: 'Discard for +4 Cards'},
+        ]
+      }, {
+        resolve: function(button_index) {
+          if (button_index === 0) {
+            turn.set('num_coins', turn.get('num_coins') + 2);
+          } else {
+            turn.get('player').discardHand();
+            turn.get('player').draw(4);
+            _.each(turn.get('game').inactivePlayers(), function(player) {
+              if (player.get('hand').length > 4) {
+                player.discardHand();
+                player.draw(4);
+              }
+            });
+          }
+        }
+      });
     }
   });
   CardList.Intrigue.TradingPost = new CardBuilder({type: 'action', cost: 5, name: 'Trading Post'}, {
@@ -316,10 +364,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
   });
 
   /* TODO:
-  Wishing Well
-  Mining Village
-  Minion
-
   Secret Chamber (reaction)
   Great Hall (multi-type)
   Masquerade (other user input)
