@@ -64,7 +64,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var hand_tm = turn.get('player').get('hand').find_cards_by_key('treasure-map');
       if (hand_tm.length > 0) {
         turn.get('player').trashFromHand([hand_tm[0]], turn.get('game').get('trash'));
-        var gold_pile = turn.get('game').get('supply').meta_gold_pile();
+        var gold_pile = turn.get('game').get('supply').find_pile_by_key("gold");
         _.each(_.range(4), function() {
           var gold = gold_pile.getCard();
           if (gold) {
