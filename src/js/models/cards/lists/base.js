@@ -18,8 +18,8 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       while (revealed_treasures.length < 2 &&
         (turn.get('player').get('deck').length + turn.get('player').get('discard').length) > 0)
       {
-        turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('discard'));
-        if (revealed_holding.models[0].get('type') == 'treasure') {
+        turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('player').get('discard'));
+        if (revealed_holding.at(0).get('type') == 'treasure') {
           revealed_treasures.placeFrom(revealed_holding);
         } else {
           revealed_non_treasures.placeFrom(revealed_holding);
@@ -233,7 +233,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
         (turn.get('player').get('deck').length + turn.get('player').get('discard').length) > 0)
       {
         turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('player').get('discard'));
-        var drawn_card = revealed_holding.models[0];
+        var drawn_card = revealed_holding.at(0);
         if (drawn_card.get('type') == 'action') {
           return ResolutionBuilder({
               input: 'Set aside '+drawn_card.get('name')+' for discard?',
@@ -337,7 +337,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       if ((spied_on_player.get('deck').length + spied_on_player.get('discard').length) > 0) {
         var revealed_holding = new Revealed();
         spied_on_player.get('deck').drawInto(revealed_holding, 1, spied_on_player.get('discard'));
-        var revealed_card = revealed_holding.models[0];
+        var revealed_card = revealed_holding.at(0);
         var prompt = spied_on_player.get('name')+' revealed '
           +revealed_card.get('name')+'. Do you wish to discard it?';
         var buttons = [

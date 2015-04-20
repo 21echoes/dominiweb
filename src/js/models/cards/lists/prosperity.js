@@ -136,7 +136,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
         (turn.get('player').get('deck').length + turn.get('player').get('discard').length) > 0 &&
         revealed_non_treasures.length < (turn.get('player').get('deck').length + turn.get('player').get('discard').length))
       {
-        turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('discard'));
+        turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('player').get('discard'));
         if (revealed_holding.at(0).get('type') == 'treasure') {
           revealed_treasures.placeFrom(revealed_holding);
         } else {

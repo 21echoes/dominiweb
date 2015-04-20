@@ -45,6 +45,12 @@ define(['backbone', 'models/cards/card'], function(Backbone, Card) {
         return card.get('key') == key && card.get('index') == index;
       });
       return cards.length > 0 ? cards[0] : null;
+    },
+
+    num_distinct: function() {
+      return Object.keys(this.groupBy(function(card) {
+        return card.get('key');
+      })).length;
     }
   });
 });
