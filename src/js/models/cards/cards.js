@@ -30,20 +30,18 @@ define(['backbone', 'models/cards/card'], function(Backbone, Card) {
     },
 
     find_cards_by_type: function(type) {
-      return this.filter(function (card) { return card.get('type') == type; });
+      return this.where({'type': type });
     },
 
     find_cards_by_key: function(key) {
-      return this.filter(function (card) { return card.get('key') == key; });
+      return this.where({'key': key });
     },
 
     find_card_by_uid: function(uid) {
       var components = uid.split('_');
       var key = components[0];
       var index = parseInt(components[1],10);
-      var cards = this.filter(function (card) {
-        return card.get('key') == key && card.get('index') == index;
-      });
+      var cards = this.where({'key': key, 'index': index});
       return cards.length > 0 ? cards[0] : null;
     },
 

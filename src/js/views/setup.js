@@ -11,6 +11,7 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
         {value: 'random-Seaside', name: "Random Seaside Game"},
         {value: 'random-Prosperity', name: "Random Prosperity Game"},
         {value: 'random-Cornucopia', name: "Random Cornucopia Game"},
+        {value: 'random-Hinterlands', name: "Random Hinterlands Game"},
         {value: 'random-all', name: "Random (all sets)"}
       ]
     },
