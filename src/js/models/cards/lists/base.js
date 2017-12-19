@@ -150,9 +150,10 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
               return [true, [pile]];
             },
             resolve: function(piles_arr) {
+              debugger;
               var pile = piles_arr[0];
               if (pile) {
-                this.get('hand').add(pile.getCard());
+                turn.get('player').get('hand').add(pile.getCard());
               }
             }
           });
@@ -223,7 +224,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     performAction: function(turn) {
       var revealed_holding = new Revealed();
       var set_aside_actions = new Revealed();
-      
+
       return this.continueAction(turn, revealed_holding, set_aside_actions);
     },
 
