@@ -300,7 +300,10 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
         resolve: function(cards_arr) {
           turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
           if (cards_arr.length == 2) {
-            turn.get('player').gainFromPile(turn.get('game').get('supply').find_pile_by_key('silver'));
+            var silverPile = turn.get('game').get('supply').find_pile_by_key('silver');
+            if (silverPile) {
+              turn.get('player').get('hand').add(silverPile.getCard());
+            }
           }
         }
       });
