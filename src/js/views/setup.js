@@ -20,10 +20,11 @@ define(['jquery', 'backbone', 'hbars!templates/setup',
       sets: [
       // TODO: get these from the Kingdoms object
         {value: 'first-game', name: "First Game (Base)"},
-        {value: 'big-money', name: "Big Money (Base)"},
-        {value: 'interaction', name: "Interaction (Base)"},
         {value: 'size-distortion', name: "Size Distortion (Base)"},
-        {value: 'village-square', name: "Village Square (Base)"},
+        {value: 'deck-top', name: "Deck Top (Base)"},
+        {value: 'sleight-of-hand', name: "SleightOfHand (Base)"},
+        {value: 'improvements', name: "Improvements (Base)"},
+        {value: 'silver-and-gold', name: "Silver and Gold (Base)"},
       ]
     },
     // "last-played": {

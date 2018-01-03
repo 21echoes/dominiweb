@@ -56,66 +56,79 @@ define(['models/cards/lists/all_cards', 'models/cards/kingdoms/kingdom'], functi
   Kingdoms.Base.FirstGame = new Kingdom({set: 'base', name: 'First Game', cards: [
       CardList.Base.Cellar,
       CardList.Base.Market,
+      CardList.Base.Merchant,
       // CardList.Base.Militia,
       CardList.Base.Mine,
       // CardList.Base.Moat,
       CardList.Base.Remodel,
       CardList.Base.Smithy,
       CardList.Base.Village,
-      CardList.Base.Woodcutter,
       CardList.Base.Workshop,
-    ]
-  });
-  Kingdoms.Base.BigMoney = new Kingdom({set: 'base', name: 'Big Money', cards: [
-      CardList.Base.Adventurer,
-      // CardList.Base.Bureaucrat,
-      CardList.Base.Chancellor,
-      CardList.Base.Chapel,
-      CardList.Base.Feast,
-      CardList.Base.Laboratory,
-      CardList.Base.Market,
-      CardList.Base.Mine,
-      CardList.Base.Moneylender,
-      // CardList.Base.ThroneRoom,
-    ]
-  });
-  Kingdoms.Base.Interaction = new Kingdom({set: 'base', name: 'Interaction', cards: [
-      // CardList.Base.Bureaucrat,
-      CardList.Base.Chancellor,
-      CardList.Base.CouncilRoom,
-      CardList.Base.Festival,
-      CardList.Base.Library,
-      // CardList.Base.Militia,
-      // CardList.Base.Moat,
-      CardList.Base.Spy,
-      CardList.Base.Thief,
-      CardList.Base.Village,
     ]
   });
   Kingdoms.Base.SizeDistortion = new Kingdom({set: 'base', name: 'Size Distortion', cards: [
-      CardList.Base.Cellar,
+      CardList.Base.Artisan,
+      CardList.Base.Bandit,
+      // CardList.Base.Bureaucrat,
       CardList.Base.Chapel,
-      CardList.Base.Feast,
+      CardList.Base.Festival,
       CardList.Base.Gardens,
-      CardList.Base.Laboratory,
-      CardList.Base.Thief,
-      CardList.Base.Village,
+      CardList.Base.Sentry,
+      // CardList.Base.ThroneRoom,
       CardList.Base.Witch,
-      CardList.Base.Woodcutter,
       CardList.Base.Workshop,
     ]
   });
-  Kingdoms.Base.VillageSquare = new Kingdom({set: 'base', name: 'Village Square', cards: [
+  Kingdoms.Base.DeckTop = new Kingdom({set: 'base', name: 'Deck Top', cards: [
+      CardList.Base.Artisan,
       // CardList.Base.Bureaucrat,
-      CardList.Base.Cellar,
+      CardList.Base.CouncilRoom,
       CardList.Base.Festival,
+      // CardList.Base.Harbinger,
+      CardList.Base.Laboratory,
+      CardList.Base.Moneylender,
+      CardList.Base.Sentry,
+      CardList.Base.Vassal,
+      CardList.Base.Village,
+    ]
+  });
+  Kingdoms.Base.SleightOfHand = new Kingdom({set: 'base', name: 'Sleight of Hand', cards: [
+      CardList.Base.Cellar,
+      CardList.Base.CouncilRoom,
+      CardList.Base.Festival,
+      CardList.Base.Gardens,
       CardList.Base.Library,
-      CardList.Base.Market,
-      CardList.Base.Remodel,
+      // CardList.Base.Harbinger,
+      // CardList.Base.Militia,
+      CardList.Base.Poacher,
       CardList.Base.Smithy,
       // CardList.Base.ThroneRoom,
-      CardList.Base.Village,
-      CardList.Base.Woodcutter,
+    ]
+  });
+  Kingdoms.Base.Improvements = new Kingdom({set: 'base', name: 'Improvements', cards: [
+      CardList.Base.Artisan,
+      CardList.Base.Cellar,
+      CardList.Base.Market,
+      CardList.Base.Merchant,
+      CardList.Base.Mine,
+      // CardList.Base.Moat,
+      CardList.Base.Moneylender,
+      CardList.Base.Poacher,
+      CardList.Base.Remodel,
+      CardList.Base.Witch,
+    ]
+  });
+  Kingdoms.Base.SilverAndGold = new Kingdom({set: 'base', name: 'Silver and Gold', cards: [
+        CardList.Base.Bandit,
+        // CardList.Base.Bureaucrat,
+        CardList.Base.Chapel,
+        // CardList.Base.Harbinger,
+        CardList.Base.Laboratory,
+        CardList.Base.Merchant,
+        CardList.Base.Mine,
+        CardList.Base.Moneylender,
+        // CardList.Base.ThroneRoom,
+        CardList.Base.Vassal,
     ]
   });
 
