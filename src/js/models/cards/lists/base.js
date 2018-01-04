@@ -152,7 +152,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
               return [true, [pile]];
             },
             resolve: function(piles_arr) {
-              debugger;
               var pile = piles_arr[0];
               if (pile) {
                 turn.get('player').get('hand').add(pile.getCard());
