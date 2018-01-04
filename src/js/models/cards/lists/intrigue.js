@@ -309,28 +309,29 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       });
     }
   });
-  CardList.Intrigue.Tribute = new CardBuilder({type: 'action', cost: 5, name: 'Tribute'}, {
-    performAction: function(turn) {
-      var attacked_player = turn.get('game').inactivePlayers()[0];
-      var revealed = new Revealed();
-      attacked_player.get('deck').drawInto(revealed, 2, attacked_player.get('discard'));
-      _.chain(revealed.models)
-        .unique(function(card) { return card.get('name'); })
-        .each(function(card) {
-          var type = card.get('type');
-          if (type == 'action') {
-            turn.set('num_actions', turn.get('num_actions') + 2);
-          }
-          if (type == 'treasure') {
-            turn.set('num_coins', turn.get('num_coins') + 2);
-          }
-          if (type == 'victory') {
-            turn.get('player').draw(2);
-          }
-        });
-      attacked_player.discard(revealed.models);
-    }
-  });
+  // removed in v2
+  // CardList.Intrigue.Tribute = new CardBuilder({type: 'action', cost: 5, name: 'Tribute'}, {
+  //   performAction: function(turn) {
+  //     var attacked_player = turn.get('game').inactivePlayers()[0];
+  //     var revealed = new Revealed();
+  //     attacked_player.get('deck').drawInto(revealed, 2, attacked_player.get('discard'));
+  //     _.chain(revealed.models)
+  //       .unique(function(card) { return card.get('name'); })
+  //       .each(function(card) {
+  //         var type = card.get('type');
+  //         if (type == 'action') {
+  //           turn.set('num_actions', turn.get('num_actions') + 2);
+  //         }
+  //         if (type == 'treasure') {
+  //           turn.set('num_coins', turn.get('num_coins') + 2);
+  //         }
+  //         if (type == 'victory') {
+  //           turn.get('player').draw(2);
+  //         }
+  //       });
+  //     attacked_player.discard(revealed.models);
+  //   }
+  // });
   // TODO: mixin for actions behavior. should be able to do something like mixins: [Cantrip, ExactRemodel(+1)]
   CardList.Intrigue.Upgrade = new CardBuilder({type: 'action', cost: 5, name: 'Upgrade'}, {
     performAction: function(turn) {
@@ -366,17 +367,200 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     }
   });
 
-  /* TODO:
+  // the following were added in v2
+  CardList.Intrigue.Lurker = new CardBuilder({type: 'action', cost: 2, name: 'Lurker'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+
+      var self = this;
+      return ResolutionBuilder({
+        input: "Trash an action from the supply, or gain an action from the trash",
+        prompt_buttons: [
+          {key: 'choose-resolution-prompt_0', text: 'Trash from supply'},
+          {key: 'choose-resolution-prompt_1', text: 'Gain from tash'},
+        ]
+      }, {
+        resolve: function(button_index) {
+          if (button_index === 0) {
+            return self.trashFromSupply(turn);
+          } else {
+            return self.gainFromTrash(turn);
+          }
+        }
+      });
+    },
+
+    trashFromSupply: function(turn) {
+        return ResolutionBuilder({
+          source: 'supply',
+          exact_count: 1
+        }, {
+          canSelectPile: function(pile, already_selected_piles) {
+            if (pile.get('builder').attrs.type !== 'action') {
+              return [false, null];
+            }
+            return [true, [pile]];
+          },
+          resolve: function(piles_arr) {
+            turn.get('game').get('trash').add(piles_arr[0].getCard());
+          }
+        });
+    },
+
+    gainFromTrash: function(turn) {
+        return ResolutionBuilder({
+          source: 'trash',
+          exact_count: 1
+        }, {
+          canSelectTrashCard: function(card, already_selected_cards) {
+            if (card.get('type') !== 'action') {
+              return [false, null];
+            }
+            return [true, [card]];
+          },
+          resolve: function(cards_arr) {
+            turn.get('game').get('trash').moveSomeCardsInto(turn.get('player').get('discard'), cards_arr);
+          }
+        });
+    }
+  });
+
+  CardList.Intrigue.SecretPassage = new CardBuilder({type: 'action', cost: 4, name: 'Secret Passage'}, {
+    performAction: function(turn) {
+      turn.set('num_actions', turn.get('num_actions') + 1);
+      turn.get('player').draw(2);
+
+      var self = this;
+      return ResolutionBuilder({
+        source: 'hand',
+        exact_count: 1
+      }, {
+        resolve: function(cards_arr) {
+          return self.returnCardToDeck(turn, cards_arr[0]);
+        }
+      });
+    },
+
+    returnCardToDeck: function(turn, card) {
+        return ResolutionBuilder({
+            input: 'Where will you place the card?',
+            prompt_buttons: [
+              {key: 'choose-resolution-prompt_0', text: "Top"},
+              {key: 'choose-resolution-prompt_1', text: "2nd"},
+              {key: 'choose-resolution-prompt_2', text: "Bottom"},
+            ]
+        }, {
+          resolve: function(button_index) {
+            var deck_position = 0;
+            if (button_index === 1) {
+              deck_position = 1;
+            } else {
+              var deck_size = turn.get('player').get('deck').length;
+              deck_position = deck_size - 1;
+            }
+            turn.get('player').get('hand').moveSomeCardsInto(
+                turn.get('player').get('deck'), [card], {at: deck_position}
+            );
+          }
+        });
+    },
+  });
+
+  CardList.Intrigue.Courtier = new CardBuilder({type: 'action', cost: 5, name: 'Courtier'}, {
+    performAction: function(turn) {
+        return ResolutionBuilder({
+            input: 'What do you want?',
+            prompt_buttons: [
+              {key: 'choose-resolution-prompt_0', text: "+1 Action"},
+              {key: 'choose-resolution-prompt_1', text: "+1 Buy"},
+              {key: 'choose-resolution-prompt_2', text: "+3 Coin"},
+              {key: 'choose-resolution-prompt_3', text: "Gain a Gold"},
+            ]
+        }, {
+          resolve: function(button_index) {
+            if (button_index === 0) {
+                turn.set('num_actions', turn.get('num_actions') + 1);
+            } else if (button_index === 1) {
+                turn.set('num_buys', turn.get('num_buys') + 1);
+            } else if (button_index === 2) {
+                turn.set('num_coins', turn.get('num_coins') + 3);
+            } else if (button_index === 3) {
+                turn.get('player').gainFromPile(turn.get('game').get('supply').find_pile_by_key('gold'));
+            }
+          }
+        });
+
+      // TODO: choose a card, do that once per type
+      // var self = this;
+      // return ResolutionBuilder({
+      //   source: 'hand',
+      //   exact_count: 1
+      // }, {
+      //   resolve: function(cards_arr) {
+      //     return self.selectBenefit(turn);
+      //   }
+      // });
+    },
+  });
+
+  CardList.Intrigue.Replace = new CardBuilder({type: 'action', cost: 5, name: 'Replace'}, {
+    performAction: function(turn) {
+        var self = this;
+        return ResolutionBuilder({
+          source: 'hand',
+          exact_count: 1
+        }, {
+          resolve: function(cards_arr) {
+            turn.get('player').get('hand').moveSomeCardsInto(turn.get('game').get('trash'), cards_arr);
+            return self.gainACard(turn, cards_arr[0]);
+          }
+        });
+    },
+
+    gainACard: function(turn, card) {
+        return ResolutionBuilder({
+          source: 'supply',
+          exact_count: 1
+        }, {
+          canSelectPile: function(pile, already_selected_piles) {
+              if (pile.get('builder').attrs.cost > card.get('cost') + 2) {
+                return [false, null];
+              }
+              return [true, [pile]];
+          },
+          resolve: function(piles_arr) {
+              var pile = piles_arr[0];
+              if (pile.get('builder').attrs.type === 'victory') {
+                turn.get('player').gainFromPile(pile);
+                var curse_pile = turn.get('game').get('supply').meta_curse_pile();
+                _.each(turn.get('game').inactivePlayers(), function(player) {
+                  player.gainFromPile(curse_pile);
+                });
+              } else {
+                turn.get('player').get('deck').add(pile.getCard(), {at: 0});
+              }
+          }
+        });
+    },
+  });
+
+  /* never implemented, but removed in v2
   Secret Chamber (reaction)
   Great Hall (multi-type)
-  Masquerade (other user input)
-  Bridge (variable cost effect)
   Coppersmith (treasure power)
   Scout (re-order cards)
   Saboteur (other user input)
+  */
+
+  /* TODO:
+  Masquerade (other user input)
+  Bridge (variable cost effect)
   Torturer (other user input)
   Harem (multi-type)
   Nobles (multi-type)
+  Diplomat (reaction)
+  Mill (multi-type)
+  Patrol (re-order cards)
   */
 
   return CardList;
