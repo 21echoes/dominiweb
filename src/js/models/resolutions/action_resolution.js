@@ -19,8 +19,8 @@ define(['backbone'], function(Backbone) {
         return true;
       }
       var self = this;
-      var selectable_but_unselected = hand.findWhere(function(card) {
-        selected.indexOf(card) == -1 && self.canSelectHandCard(card, selected);
+      var selectable_but_unselected = hand.find(function(card) {
+        return selected.indexOf(card) == -1 && self.canSelectHandCard(card, selected);
       });
       // if there are selectable cards but they are not selected, then we are not ready to resolve
       return !selectable_but_unselected;
@@ -31,8 +31,8 @@ define(['backbone'], function(Backbone) {
         return true;
       }
       var self = this;
-      var selectable_but_unselected = trash.findWhere(function(card) {
-        selected.indexOf(card) == -1 && self.canSelectTrashCard(card, selected);
+      var selectable_but_unselected = trash.find(function(card) {
+        return selected.indexOf(card) == -1 && self.canSelectTrashCard(card, selected);
       });
       // if there are selectable cards but they are not selected, then we are not ready to resolve
       return !selectable_but_unselected;
@@ -43,8 +43,8 @@ define(['backbone'], function(Backbone) {
         return true;
       }
       var self = this;
-      var selectable_but_unselected = supply.findWhere(function(pile) {
-        selected.indexOf(pile) == -1 && self.canSelectPile(pile, selected);
+      var selectable_but_unselected = supply.find(function(pile) {
+        return selected.indexOf(pile) == -1 && self.canSelectPile(pile, selected);
       });
       // if there are selectable piles but they are not selected, then we are not ready to resolve
       return !selectable_but_unselected;
