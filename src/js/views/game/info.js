@@ -94,6 +94,9 @@ define(['jquery', 'backbone', 'hbars!templates/game/info'], function($, Backbone
           if (this.turn.get('action_resolution').get('source') == 'hand') {
             selected = this.turn.get('selected_hand_cards');
             enabled = this.turn.get('action_resolution').enoughHandCardsSelectedForResolution(selected, this.turn.get('player').get('hand'));
+          } else if (this.turn.get('action_resolution').get('source') == 'trash') {
+            selected = this.turn.get('selected_trash_cards');
+            enabled = this.turn.get('action_resolution').enoughTrashCardsSelectedForResolution(selected, this.turn.get('game').get('trash'));
           } else if (this.turn.get('action_resolution').get('source') == 'supply') {
             selected = this.turn.get('selected_piles');
             enabled = this.turn.get('action_resolution').enoughSupplyPilesSelectedForResolution(selected, this.turn.get('game').get('supply'));

@@ -1,8 +1,8 @@
 define(['jquery', 'backbone',
-  'views/game/supply', 'views/game/hand', 'views/game/view-only-play-area', 'views/game/info', 'hbars!templates/game/game',
+  'views/game/supply', 'views/game/hand', 'views/game/trash', 'views/game/view-only-play-area', 'views/game/info', 'hbars!templates/game/game',
   'models/game'],
 function($, Backbone,
-  SupplyView, HandView, ViewOnlyPlayAreaView, InfoView, template,
+  SupplyView, HandView, TrashView, ViewOnlyPlayAreaView, InfoView, template,
   Game) {
   return Backbone.View.extend({
     el: '#container',
@@ -16,8 +16,9 @@ function($, Backbone,
       var turn = this.game.get('turn');
       this.handView = new HandView(turn.get('player').get('hand'));
       this.handView.bind("hand:card:clicked", this.handCardClicked, this);
+      this.trashView = new TrashView({id: 'trash', name: 'Trash'}, turn.get('game').get('trash'));
+      this.trashView.bind("trash:card:clicked", this.trashCardClicked, this);
       this.tableView = new ViewOnlyPlayAreaView({id: 'table', name: 'Table'}, turn.get('player').get('table'));
-      this.trashView = new ViewOnlyPlayAreaView({id: 'trash', name: 'Trash'}, turn.get('game').get('trash'));
       this.playAreas = [this.handView, this.tableView, this.trashView];
 
       this.infoView = new InfoView({el: '#info'}, turn);
@@ -54,7 +55,7 @@ function($, Backbone,
       this.$el.html(template());
 
       this.supplyView.render();
-      
+
       var $playAreas = this.$el.find('#play-areas');
       $playAreas.empty();
       _.each(this.playAreas, function(playArea) {
@@ -88,6 +89,10 @@ function($, Backbone,
 
     handCardClicked: function(card) {
       this.game.get('turn').tryToSelectHandCard(card);
+    },
+
+    trashCardClicked: function(card) {
+      this.game.get('turn').tryToSelectTrashCard(card);
     },
 
     actionButtonClicked: function(turn_action) {

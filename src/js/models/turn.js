@@ -14,6 +14,7 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       this.set('num_coins', 0);
       this.set('selected_piles', []);
       this.set('selected_hand_cards', []);
+      this.set('selected_trash_cards', []);
 
       var actionCards = player ? player.get('hand').find_cards_by_type('action') : [];
       if (actionCards.length == 0) {
@@ -123,6 +124,33 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
       return false;
     },
 
+    tryToSelectTrashCard: function(card) {
+      if (card.get('selected')) {
+        var selection_index = this.get('selected_trash_cards').indexOf(card);
+        this.get('selected_trash_cards').splice(selection_index, 1);
+        card.set('selected', false);
+        return false; // ? :\
+      }
+      if (this.playState() == 'ACTIONS') {
+        if (this.get('action_resolution')
+          && this.get('action_resolution').get('source') == 'trash') {
+          if (this.get('action_resolution').canSelectTrashCard(card, this.get('selected_trash_cards'))) {
+            this.set('selected_trash_cards', this.get('selected_trash_cards').concat([card]));
+            card.set('selected', true);
+            if (this.get('action_resolution').get('max_count')
+              && this.get('action_resolution').get('max_count') < this.get('selected_trash_cards').length) {
+              var first_selected = this.get('selected_trash_cards').splice(0, 1)[0];
+              first_selected.set('selected', false);
+            }
+            return true;
+          } else {
+            return false;
+          }
+        }
+      }
+      return false;
+    },
+
     playAction: function(action_card) {
       action_card.set('selected', false);
       this.set('selected_hand_cards', []);
@@ -146,6 +174,9 @@ define(['backbone', 'models/players/player'], function(Backbone, Player) {
         if (ar.get('source') == 'hand') {
           selected = this.get('selected_hand_cards');
           this.set('selected_hand_cards', []);
+        } else if (ar.get('source') == 'trash') {
+          selected = this.get('selected_trash_cards');
+          this.set('selected_trash_cards', []);
         } else if (ar.get('source') == 'supply') {
           selected = this.get('selected_piles');
           this.set('selected_piles', []);

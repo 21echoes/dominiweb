@@ -1,8 +1,12 @@
 define(['backbone'], function(Backbone) {
   return Backbone.Model.extend({
     // resolve : function
-    
+
     canSelectHandCard: function(card, already_selected_cards) {
+      return false;
+    },
+
+    canSelectTrashCard: function(card, already_selected_cards) {
       return false;
     },
 
@@ -17,6 +21,18 @@ define(['backbone'], function(Backbone) {
       var self = this;
       var selectable_but_unselected = hand.findWhere(function(card) {
         selected.indexOf(card) == -1 && self.canSelectHandCard(card, selected);
+      });
+      // if there are selectable cards but they are not selected, then we are not ready to resolve
+      return !selectable_but_unselected;
+    },
+
+    enoughTrashCardsSelectedForResolution: function(selected, trash) {
+      if (!this.get('min_count') || selected.length >= this.get('min_count')) {
+        return true;
+      }
+      var self = this;
+      var selectable_but_unselected = trash.findWhere(function(card) {
+        selected.indexOf(card) == -1 && self.canSelectTrashCard(card, selected);
       });
       // if there are selectable cards but they are not selected, then we are not ready to resolve
       return !selectable_but_unselected;
