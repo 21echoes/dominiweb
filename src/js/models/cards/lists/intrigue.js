@@ -212,7 +212,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     performAction: function(turn) {
       return ResolutionBuilder({
         source: 'supply',
-        // TODO: enforce *_count
         exact_count: 1
       }, {
         canSelectPile: function(pile, already_selected_piles) {
@@ -341,7 +340,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {

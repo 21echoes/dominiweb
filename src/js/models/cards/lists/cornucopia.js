@@ -91,7 +91,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost, index) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count, up to num selectable piles
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {

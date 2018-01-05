@@ -17,7 +17,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost, nextGBB) {
         return ResolutionBuilder({
           source: 'supply',
-          // TODO: enforce *_count
           exact_count: 1
         }, {
           canSelectPile: function(pile, already_selected_piles) {
@@ -52,7 +51,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
 
       return ResolutionBuilder({
           source: 'hand',
-          // TODO: enforce *_count
           exact_count: 1
         }, {
           resolve: function(cards_arr) {
@@ -105,7 +103,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
     trash_non_treasure: function(turn) {
       return ResolutionBuilder({
         source: 'hand',
-        exact_count: 1
+        max_count: 1
       }, {
         canSelectHandCard: function(card, already_selected_cards) {
           return (card.get('type') != 'treasure');

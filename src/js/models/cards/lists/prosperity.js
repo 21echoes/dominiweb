@@ -33,7 +33,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {
@@ -49,7 +48,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       }
       return ResolutionBuilder({
         source: 'hand',
-        // TODO: if no cards in hand, don't explode
         exact_count: 1
       }, {
         resolve: function(cards_arr) {
@@ -64,7 +62,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count, except in instances where no cards are valid
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {
@@ -108,7 +105,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
   Talisman
   Royal Seal
   Venture
-  
+
   MULTI-TYPE
   Hoard
 

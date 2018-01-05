@@ -141,7 +141,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {
@@ -161,7 +160,7 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       }
       return ResolutionBuilder({
         source: 'hand',
-        exact_count: 1
+        max_count: 1
       }, {
         resolve: function(cards_arr) {
           turn.get('player').trashFromHand(cards_arr, turn.get('game').get('trash'));
@@ -175,7 +174,6 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       var gainerBuilderBuilder = function(trashedCost) {
         return ResolutionBuilder({
             source: 'supply',
-            // TODO: enforce *_count
             exact_count: 1
           }, {
             canSelectPile: function(pile, already_selected_piles) {
