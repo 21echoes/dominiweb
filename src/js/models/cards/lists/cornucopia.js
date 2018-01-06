@@ -143,14 +143,11 @@ function(CardBuilder, CardList, Revealed, ResolutionBuilder) {
       {
         turn.get('player').get('deck').drawInto(revealed_holding, 1, turn.get('player').get('discard'));
         var match = turn.get('player').get('hand').find(function(card) {
-          revealed_holding.at(0).get('key') == card.get('key');
+          return revealed_holding.at(0).get('key') == card.get('key');
         });
-        console.log('match is',match);
         if (!match) {
-          console.log('so putting into hand');
           revealed_match.placeFrom(revealed_holding);
         } else {
-          console.log('so discarding');
           revealed_to_discard.placeFrom(revealed_holding);
         }
       }
